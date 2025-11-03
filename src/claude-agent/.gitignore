@@ -1,0 +1,11 @@
+# Environment files with secrets
+.env
+
+# Workspace directory (cloned repos)
+workspace/
+
+# Logs
+*.log
+
+# Docker volumes
+volumes/

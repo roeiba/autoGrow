@@ -1,0 +1,8 @@
+Fix this issue:
+
+Issue #{issue_number}: {issue_title}
+{issue_body}
+
+Repository has: {languages}
+
+Provide the fix in JSON format with files_to_modify array containing path and code for each file.

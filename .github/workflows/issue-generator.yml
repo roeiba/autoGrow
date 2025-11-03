@@ -1,0 +1,44 @@
+name: Issue Generator Agent
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      min_issues:
+        description: 'Minimum number of open issues'
+        required: false
+        default: '3'
+
+env:
+  MIN_OPEN_ISSUES: ${{ github.event.inputs.min_issues || vars.MIN_OPEN_ISSUES || '3' }}
+
+jobs:
+  generate-issues:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: issue-generator
+      cancel-in-progress: false
+    
+    permissions:
+      issues: write
+      contents: read
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install anthropic PyGithub
+      
+      - name: Run generator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REPO_NAME: ${{ github.repository }}
+        run: python .github/scripts/issue_generator.py

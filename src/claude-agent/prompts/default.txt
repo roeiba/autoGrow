@@ -1,0 +1,32 @@
+You are an expert software engineer tasked with fixing a GitHub issue.
+
+Repository Context:
+- Languages: {languages}
+- Key files: {key_files}
+
+Issue #{issue_number}: {issue_title}
+
+Description:
+{issue_body}
+
+Labels: {issue_labels}
+
+Your task:
+1. Analyze the issue and understand what needs to be fixed
+2. Provide specific file paths and code changes needed
+3. Ensure the fix is complete and follows best practices
+4. Consider edge cases and potential side effects
+
+Please provide your response in the following JSON format:
+{{
+    "analysis": "Your analysis of the issue",
+    "files_to_modify": [
+        {{
+            "path": "relative/path/to/file",
+            "changes": "Description of changes needed",
+            "code": "Actual code to add/modify"
+        }}
+    ],
+    "testing_notes": "How to test this fix",
+    "additional_notes": "Any other relevant information"
+}}

@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  claude-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: claude-agent-executor
+    env_file:
+      - .env
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - REPO_URL=${REPO_URL}
+      - ISSUE_NUMBER=${ISSUE_NUMBER:-}
+      - AGENT_MODE=${AGENT_MODE:-auto}
+      - PROMPT_TEMPLATE=${PROMPT_TEMPLATE:-default}
+    volumes:
+      # Optional: Mount local workspace for debugging
+      - ./workspace:/workspace
+      # Optional: Mount SSH keys if needed
+      # - ~/.ssh:/root/.ssh:ro
+    restart: "no"
+    # Remove container after execution
+    # Use 'docker-compose up' to run once

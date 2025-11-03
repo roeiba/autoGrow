@@ -1,0 +1,126 @@
+name: Validate Template
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Check Required Files
+      run: |
+        echo "🔍 Checking for required files..."
+        required_files=(
+          "README.md"
+          "PROJECT_BRIEF.md"
+          ".agents/project-rules.md"
+          "LICENSE"
+          "CONTRIBUTING.md"
+          "CODE_OF_CONDUCT.md"
+          "SECURITY.md"
+        )
+        
+        missing_files=()
+        for file in "${required_files[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Missing required file: $file"
+            missing_files+=("$file")
+          else
+            echo "✅ Found: $file"
+          fi
+        done
+        
+        if [ ${#missing_files[@]} -ne 0 ]; then
+          echo "❌ Missing required files: ${missing_files[*]}"
+          exit 1
+        fi
+        
+        echo "✅ All required files present"
+    
+    - name: Validate Directory Structure
+      run: |
+        echo "🏗️ Validating directory structure..."
+        required_dirs=(
+          ".agents"
+          ".ai-prompts"
+          "project-docs"
+          "tasks"
+          "deployment"
+          "scripts"
+        )
+        
+        missing_dirs=()
+        for dir in "${required_dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            missing_dirs+=("$dir")
+          else
+            echo "✅ Found: $dir/"
+          fi
+        done
+        
+        if [ ${#missing_dirs[@]} -ne 0 ]; then
+          echo "❌ Missing required directories: ${missing_dirs[*]}"
+          exit 1
+        fi
+        
+        echo "✅ All required directories present"
+    
+    - name: Check PROJECT_BRIEF.md Completeness
+      run: |
+        echo "📋 Checking PROJECT_BRIEF.md completeness..."
+        
+        # Check if PROJECT_BRIEF.md has been filled out (not just template)
+        if grep -q "\[Your Project Name\]" PROJECT_BRIEF.md; then
+          echo "❌ PROJECT_BRIEF.md appears to be unfilled template"
+          exit 1
+        fi
+        
+        if grep -q "\[Feature Category" PROJECT_BRIEF.md; then
+          echo "❌ PROJECT_BRIEF.md contains unfilled template sections"
+          exit 1
+        fi
+        
+        echo "✅ PROJECT_BRIEF.md appears to be properly filled out"
+    
+    - name: Validate Markdown Links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        config-file: '.github/workflows/markdown-link-check-config.json'
+        
+    - name: Check for Placeholder Content
+      run: |
+        echo "🔍 Checking for placeholder content..."
+        
+        # List of placeholder patterns that shouldn't exist in a launch-ready template
+        placeholders=(
+          "TODO:"
+          "FIXME:"
+          "XXX:"
+          "[TODO]"
+          "[FIXME]"
+          "placeholder"
+          "PLACEHOLDER"
+        )
+        
+        found_placeholders=false
+        for placeholder in "${placeholders[@]}"; do
+          if grep -r "$placeholder" . --exclude-dir=.git --exclude-dir=node_modules; then
+            echo "❌ Found placeholder: $placeholder"
+            found_placeholders=true
+          fi
+        done
+        
+        if [ "$found_placeholders" = true ]; then
+          echo "❌ Placeholders found - template not ready for launch"
+          exit 1
+        fi
+        
+        echo "✅ No placeholders found"

@@ -1,0 +1,54 @@
+name: Issue Resolver Agent
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: 'Specific issue number (optional)'
+        required: false
+
+env:
+  ISSUE_LABELS_TO_HANDLE: ${{ vars.ISSUE_LABELS_TO_HANDLE || 'bug,enhancement' }}
+  ISSUE_LABELS_TO_SKIP: ${{ vars.ISSUE_LABELS_TO_SKIP || 'wontfix,duplicate,in-progress' }}
+  MAX_EXECUTION_TIME: ${{ vars.MAX_EXECUTION_TIME || '8' }}
+
+jobs:
+  resolve-issue:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: issue-resolver
+      cancel-in-progress: false
+    
+    permissions:
+      issues: write
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: pip install anthropic PyGithub GitPython
+      
+      - name: Configure Git
+        run: |
+          git config --global user.name "Issue Resolver Agent"
+          git config --global user.email "agent@github-actions.bot"
+      
+      - name: Run resolver
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          REPO_NAME: ${{ github.repository }}
+          SPECIFIC_ISSUE: ${{ github.event.inputs.issue_number }}
+        run: python .github/scripts/issue_resolver.py
