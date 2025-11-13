@@ -120,8 +120,21 @@ This template includes ready-to-use AI agents for automation:
 
 - **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide
 - **[PROJECT_BRIEF.md](PROJECT_BRIEF.md)** - Template to fill out
+- **[examples/](examples/)** - Complete demo projects showcasing AI generation
 - **[.agents/](.agents/)** - AI guidelines and maintenance docs
 - **[src/gemini-agent/](src/gemini-agent/)** - Gemini CLI agent setup and examples
+
+## 🎯 Examples & Demos
+
+See **[examples/](examples/)** directory for complete demonstrations:
+
+- **[Task Management API](examples/task-management-api/)** - Full-stack REST API with authentication, real-time features, tests, and deployment configs
+  - Complete PROJECT_BRIEF.md example
+  - Step-by-step generation guide
+  - AI-generated production-ready code
+  - 30-60 minutes to generate vs. 2-3 weeks manual development
+
+Learn how to write effective requirements and generate production-ready applications with AI assistance.
 
 ## 🤝 Contributing
 
