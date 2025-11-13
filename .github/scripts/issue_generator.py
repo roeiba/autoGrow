@@ -1,222 +1,49 @@
 #!/usr/bin/env python3
 """
-Issue Generator Agent
-Ensures minimum number of open issues by generating new ones with Claude AI using Agent SDK
+Issue Generator Agent - GitHub Actions Wrapper
+
+Thin wrapper script for GitHub Actions workflows.
+Core logic is in src/agents/issue_generator.py
 """
 
 import os
 import sys
-import json
 from pathlib import Path
 from github import Github, Auth
 
-# Add src directory to path to import claude_cli_agent
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src' / 'claude-agent'))
+# Add src directory to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src'))
 
-# Import Claude CLI Agent or fallback to Anthropic SDK
-try:
-    from claude_cli_agent import ClaudeAgent
-    USE_CLAUDE_CLI = True
-except ImportError:
-    print("⚠️  claude_cli_agent not available, using Anthropic SDK")
-    USE_CLAUDE_CLI = False
-    try:
-        from anthropic import Anthropic
-    except ImportError:
-        print("❌ Neither claude_cli_agent nor anthropic SDK available")
-        sys.exit(1)
+# Import core agent
+from agents.issue_generator import IssueGenerator
 
-# Configuration
+# Configuration from environment
 MIN_ISSUES = int(os.getenv('MIN_OPEN_ISSUES', '3'))
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 REPO_NAME = os.getenv('REPO_NAME')
 
-print(f"🔍 Checking issue count (minimum: {MIN_ISSUES})")
+if not GITHUB_TOKEN or not REPO_NAME:
+    print("❌ Missing required environment variables: GITHUB_TOKEN, REPO_NAME")
+    sys.exit(1)
 
 # Initialize GitHub client
 auth = Auth.Token(GITHUB_TOKEN)
 gh = Github(auth=auth)
 repo = gh.get_repo(REPO_NAME)
 
-# Count open issues (excluding pull requests)
-open_issues = list(repo.get_issues(state='open'))
-open_issues = [i for i in open_issues if not i.pull_request]
-issue_count = len(open_issues)
+print(f"✅ Connected to repository: {REPO_NAME}")
 
-print(f"📊 Current open issues: {issue_count}")
-
-if issue_count >= MIN_ISSUES:
-    print(f"✅ Sufficient issues exist ({issue_count} >= {MIN_ISSUES})")
-    sys.exit(0)
-
-# Need to generate issues
-needed = MIN_ISSUES - issue_count
-print(f"🤖 Generating {needed} new issue(s)...")
-
-
-def generate_issues():
-    """Use Claude CLI Agent to generate issues"""
-    
-    # Get repository context
-    print("📖 Analyzing repository for potential issues...")
-    
-    try:
-        readme = repo.get_readme().decoded_content.decode('utf-8')[:1000]
-    except:
-        readme = "No README found"
-    
-    recent_commits = list(repo.get_commits()[:5])
-    commit_messages = "\n".join([f"- {c.commit.message.split(chr(10))[0]}" for c in recent_commits])
-    
-    # Build prompt for Claude
-    prompt = f"""Analyze this GitHub repository and suggest {needed} new issue(s).
-
-Repository: {REPO_NAME}
-
-README excerpt:
-{readme}
-
-Recent commits:
-{commit_messages}
-
-Current open issues:
-{chr(10).join([f"- #{i.number}: {i.title}" for i in open_issues[:10]])}
-
-Generate {needed} realistic, actionable issue(s). Include diverse types:
-1. **feature**: New functionality or enhancements
-2. **bug**: Potential bugs or issues to fix
-3. **documentation**: Documentation improvements
-4. **refactor**: Code quality and refactoring
-5. **test**: Testing improvements
-6. **performance**: Performance optimizations
-7. **security**: Security improvements
-8. **ci/cd**: CI/CD pipeline improvements
-
-Respond with ONLY a JSON object in this exact format:
-{{
-  "issues": [
-    {{
-      "title": "Brief title (max 80 chars)",
-      "body": "Description (max 300 chars)",
-      "labels": ["feature"]
-    }}
-  ]
-}}
-
-Use appropriate labels: feature, bug, documentation, refactor, test, performance, security, ci/cd
-
-Keep descriptions brief and output ONLY the JSON, nothing else."""
-
-    print(f"📝 Prompt length: {len(prompt)} chars")
-    
-    # Call Claude AI (CLI or API)
-    try:
-        if USE_CLAUDE_CLI:
-            # Try Claude CLI first
-            print("🤖 Using Claude CLI...")
-            agent = ClaudeAgent(
-                output_format="text",
-                verbose=True
-            )
-            
-            result = agent.query(
-                prompt,
-                system_prompt="You are a helpful GitHub issue generator. Always respond with valid JSON only."
-            )
-            
-            # Extract response
-            if isinstance(result, dict) and "result" in result:
-                response_text = result["result"]
-            else:
-                response_text = str(result)
-        else:
-            # Fallback to Anthropic SDK
-            print("🤖 Using Anthropic API...")
-            client = Anthropic(api_key=ANTHROPIC_API_KEY)
-            
-            message = client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=2000,
-                system="You are a helpful GitHub issue generator. Always respond with valid JSON only.",
-                messages=[
-                    {"role": "user", "content": prompt}
-                ]
-            )
-            
-            response_text = message.content[0].text
-        
-        print(f"✅ Received response ({len(response_text)} chars)")
-        
-    except Exception as e:
-        print(f"❌ Error calling Claude: {e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
-    
-    # Parse response
-    try:
-        print("🔍 Parsing Claude response...")
-        
-        # Clean up response - remove markdown code blocks if present
-        cleaned_response = response_text.strip()
-        if "```json" in cleaned_response:
-            cleaned_response = cleaned_response.split("```json")[1].split("```")[0].strip()
-            print("📝 Removed ```json``` markers")
-        elif "```" in cleaned_response:
-            cleaned_response = cleaned_response.split("```")[1].split("```")[0].strip()
-            print("📝 Removed ``` markers")
-        
-        # Find JSON object in response
-        start_idx = cleaned_response.find('{')
-        end_idx = cleaned_response.rfind('}') + 1
-        
-        if start_idx == -1 or end_idx == 0:
-            raise ValueError("No JSON object found in response")
-        
-        json_str = cleaned_response[start_idx:end_idx]
-        print(f"📊 Extracted JSON: {len(json_str)} chars")
-        
-        data = json.loads(json_str)
-        issues_to_create = data.get('issues', [])[:needed]
-        
-        if not issues_to_create:
-            print("⚠️  No issues generated by Claude")
-            return
-        
-        # Create issues
-        for issue_data in issues_to_create:
-            title = issue_data.get('title', 'Untitled Issue')[:80]  # Limit title length
-            body = issue_data.get('body', '')
-            labels = issue_data.get('labels', [])
-            
-            full_body = f"{body}\n\n---\n*Generated by Issue Generator Agent*"
-            
-            new_issue = repo.create_issue(
-                title=title,
-                body=full_body,
-                labels=labels
-            )
-            
-            print(f"✅ Created issue #{new_issue.number}: {title}")
-        
-        print(f"🎉 Successfully generated {len(issues_to_create)} issue(s)")
-        
-    except json.JSONDecodeError as e:
-        print(f"❌ Failed to parse Claude response as JSON: {e}")
-        print(f"Response (first 1000 chars): {response_text[:1000]}")
-        print(f"Response (last 500 chars): {response_text[-500:]}")
-        sys.exit(1)
-    except Exception as e:
-        print(f"❌ Error creating issues: {e}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
-
-
-# Run the function
+# Run the agent
 try:
-    generate_issues()
+    agent = IssueGenerator(
+        repo=repo,
+        anthropic_api_key=ANTHROPIC_API_KEY,
+        min_issues=MIN_ISSUES
+    )
+    
+    agent.check_and_generate()
+    
 except Exception as e:
     print(f"❌ Fatal error: {e}")
     import traceback
