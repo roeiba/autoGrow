@@ -30,6 +30,7 @@ class TestClaudeAgentInitialization:
             assert agent.allowed_tools is None
             assert agent.disallowed_tools is None
             assert agent.permission_mode is None
+            assert agent.enable_cache is True  # Caching enabled by default
     
     def test_init_custom_output_format(self):
         """Test initialization with custom output format"""
@@ -58,7 +59,21 @@ class TestClaudeAgentInitialization:
         with patch.object(ClaudeAgent, '_is_claude_installed', return_value=True):
             agent = ClaudeAgent(permission_mode="acceptEdits")
             assert agent.permission_mode == "acceptEdits"
-    
+
+    def test_init_with_cache_enabled(self):
+        """Test initialization with caching enabled"""
+        with patch.object(ClaudeAgent, '_is_claude_installed', return_value=True):
+            agent = ClaudeAgent(enable_cache=True)
+            assert agent.enable_cache is True
+            assert agent.cache is not None
+
+    def test_init_with_cache_disabled(self):
+        """Test initialization with caching disabled"""
+        with patch.object(ClaudeAgent, '_is_claude_installed', return_value=True):
+            agent = ClaudeAgent(enable_cache=False)
+            assert agent.enable_cache is False
+            assert agent.cache is None
+
     def test_init_claude_not_installed(self):
         """Test initialization fails when claude CLI not installed"""
         with patch.object(ClaudeAgent, '_is_claude_installed', return_value=False):
