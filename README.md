@@ -74,6 +74,14 @@ The AI will create:
 - Tests and CI/CD
 - Deployment configurations
 
+## 🎓 See It In Action
+
+Want to see what AI generates? Check out our **complete demo project**:
+
+👉 **[TaskFlow Example](examples/task-management-app/)** - A full-stack task management application generated from a single PROJECT_BRIEF.md. Includes backend API, React frontend, tests, Docker configs, and comprehensive documentation.
+
+**Time to generate**: < 1 day vs 4-6 weeks manually
+
 ## ✨ Key Features
 
 - **AI-Optimized** - Structured for AI agents to understand and generate code
@@ -120,6 +128,7 @@ This template includes ready-to-use AI agents for automation:
 
 - **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide
 - **[PROJECT_BRIEF.md](PROJECT_BRIEF.md)** - Template to fill out
+- **[examples/](examples/)** - Complete demo projects showcasing AI generation
 - **[.agents/](.agents/)** - AI guidelines and maintenance docs
 - **[src/gemini-agent/](src/gemini-agent/)** - Gemini CLI agent setup and examples
 
