@@ -10,8 +10,12 @@ import sys
 from pathlib import Path
 from typing import List, Dict, Optional
 
-# Add src directory to path to import claude_cli_agent
+# Add src directory to path to import modules
 sys.path.insert(0, str(Path(__file__).parent.parent / 'claude-agent'))
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Import model configuration
+from models_config import CLAUDE_MODELS, SystemPrompts
 
 # Import Claude CLI Agent or fallback to Anthropic SDK
 try:
@@ -118,15 +122,8 @@ Recent commits:
 Current open issues:
 {chr(10).join([f"- #{i.number}: {i.title}" for i in open_issues[:10]])}
 
-Generate {needed} realistic, actionable issue(s). Include diverse types:
-1. **feature**: New functionality or enhancements
-2. **bug**: Potential bugs or issues to fix
-3. **documentation**: Documentation improvements
-4. **refactor**: Code quality and refactoring
-5. **test**: Testing improvements
-6. **performance**: Performance optimizations
-7. **security**: Security improvements
-8. **ci/cd**: CI/CD pipeline improvements
+Generate {needed} realistic, actionable issue(s). 
+Read the whole project and find the most important thing for it - from new features, UI, apps, marketing or sales tools to bug fixes, tests, devops etc. 
 
 Respond with ONLY a JSON object in this exact format:
 {{
@@ -155,7 +152,7 @@ Keep descriptions brief and output ONLY the JSON, nothing else."""
                 
                 result = agent.query(
                     prompt,
-                    system_prompt="You are a helpful GitHub issue generator. Always respond with valid JSON only."
+                    system_prompt=SystemPrompts.ISSUE_GENERATOR
                 )
                 
                 # Extract response
@@ -168,9 +165,9 @@ Keep descriptions brief and output ONLY the JSON, nothing else."""
                 client = Anthropic(api_key=self.anthropic_api_key)
                 
                 message = client.messages.create(
-                    model="claude-3-5-sonnet-20241022",
-                    max_tokens=2000,
-                    system="You are a helpful GitHub issue generator. Always respond with valid JSON only.",
+                    model=CLAUDE_MODELS.ISSUE_GENERATION,
+                    max_tokens=CLAUDE_MODELS.DEFAULT_MAX_TOKENS,
+                    system=SystemPrompts.ISSUE_GENERATOR,
                     messages=[
                         {"role": "user", "content": prompt}
                     ]

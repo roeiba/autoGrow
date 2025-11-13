@@ -18,6 +18,7 @@ from config import AgentConfig
 from utils.logger import setup_logger
 from utils.project_brief_validator import validate_project_brief
 from prompt_loader import PromptLoader
+from models_config import CLAUDE_MODELS
 
 
 class AgenticWorkflow:
@@ -183,8 +184,8 @@ class AgenticWorkflow:
         
         try:
             message = self.anthropic.messages.create(
-                model="claude-sonnet-4-5",
-                max_tokens=4096,
+                model=CLAUDE_MODELS.WORKFLOW,
+                max_tokens=CLAUDE_MODELS.WORKFLOW_MAX_TOKENS,
                 messages=[
                     {"role": "user", "content": prompt}
                 ]
@@ -411,15 +412,6 @@ Closes #{issue['number']}
         except Exception as e:
             self.logger.error(f"\nError during workflow execution: {e}")
             import traceback
-
-# Logging
-import sys
-from pathlib import Path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-from logging_config import get_logger
-
-logger = get_logger(__name__)
-
             traceback.print_exc()
             return 1
 

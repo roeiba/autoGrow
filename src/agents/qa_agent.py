@@ -14,6 +14,10 @@ from typing import Dict, List, Optional
 
 # Add src directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent / 'claude-agent'))
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Import model configuration
+from models_config import CLAUDE_MODELS, SystemPrompts
 
 # Import Claude CLI Agent or fallback to Anthropic SDK
 try:
@@ -244,7 +248,7 @@ Output ONLY the JSON, nothing else.
                 agent = ClaudeAgent(output_format="text", verbose=False)
                 result = agent.query(
                     prompt,
-                    system_prompt="You are a QA engineer. Always respond with valid JSON only."
+                    system_prompt=SystemPrompts.QA_ENGINEER
                 )
                 if isinstance(result, dict) and "result" in result:
                     response_text = result["result"]
@@ -254,9 +258,9 @@ Output ONLY the JSON, nothing else.
                 print("🤖 Using Anthropic API...")
                 client = Anthropic(api_key=self.anthropic_api_key)
                 message = client.messages.create(
-                    model="claude-3-5-sonnet-20241022",
-                    max_tokens=3000,
-                    system="You are a QA engineer. Always respond with valid JSON only.",
+                    model=CLAUDE_MODELS.QA_ANALYSIS,
+                    max_tokens=CLAUDE_MODELS.QA_MAX_TOKENS,
+                    system=SystemPrompts.QA_ENGINEER,
                     messages=[{"role": "user", "content": prompt}]
                 )
                 response_text = message.content[0].text
