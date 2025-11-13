@@ -37,6 +37,7 @@
 ### Development
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture
 - **[API_REFERENCE.md](API_REFERENCE.md)** - API documentation
+- **[RETRY_LOGIC.md](RETRY_LOGIC.md)** - Retry logic with Tenacity
 
 ## 📜 Historical Documentation
 

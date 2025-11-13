@@ -1,0 +1,5 @@
+Collecting tenacity
+  Downloading tenacity-9.1.2-py3-none-any.whl.metadata (1.2 kB)
+Downloading tenacity-9.1.2-py3-none-any.whl (28 kB)
+Installing collected packages: tenacity
+Successfully installed tenacity-9.1.2

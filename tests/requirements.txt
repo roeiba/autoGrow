@@ -20,3 +20,4 @@ mypy>=1.5.0
 # For testing specific modules
 PyGithub>=2.1.0  # If testing GitHub integration
 anthropic>=0.3.0  # If testing Claude integration
+tenacity>=8.2.0  # Retry library for resilient API calls

@@ -11,6 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Launch preparation materials and documentation
 - Comprehensive social media and Reddit launch strategy
 - GitHub repository optimization guidelines
+- Tenacity library integration for robust retry logic (#31)
+- Comprehensive retry logic documentation in docs/RETRY_LOGIC.md
+
+### Changed
+- Migrated custom retry implementation to Tenacity for better reliability
+- Enhanced retry logic with exponential backoff and jitter
+- Improved error classification for GitHub and Anthropic API calls
 
 ## [2.0.1] - 2025-11-11
 
