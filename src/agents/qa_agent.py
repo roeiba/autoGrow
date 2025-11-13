@@ -144,7 +144,7 @@ class QAAgent:
                 'message': commit.commit.message.split('\n')[0][:100],
                 'author': commit.commit.author.name,
                 'date': commit.commit.author.date.isoformat(),
-                'files_changed': len(commit.files) if commit.files else 0
+                'files_changed': len(list(commit.files)) if commit.files else 0
             })
         
         print(f"✅ Gathered context: {len(context['issues'])} issues, {len(context['pull_requests'])} PRs, {len(context['commits'])} commits")
