@@ -120,8 +120,23 @@ This template includes ready-to-use AI agents for automation:
 
 - **[QUICKSTART.md](QUICKSTART.md)** - Quick start guide
 - **[PROJECT_BRIEF.md](PROJECT_BRIEF.md)** - Template to fill out
+- **[examples/](examples/)** - Complete demo projects showcasing AI generation
 - **[.agents/](.agents/)** - AI guidelines and maintenance docs
 - **[src/gemini-agent/](src/gemini-agent/)** - Gemini CLI agent setup and examples
+
+## 💡 Examples
+
+See complete, working examples in the **[examples/](examples/)** directory:
+
+- **[Task Manager Demo](examples/task-manager-demo/)** - Full-stack Node.js + React app
+  - Complete PROJECT_BRIEF.md showing how to define requirements
+  - Generated backend API with authentication and real-time features
+  - React frontend with modern UI components
+  - Step-by-step [GUIDE.md](examples/task-manager-demo/GUIDE.md) explaining the generation process
+  - Docker and Kubernetes configurations
+  - CI/CD pipeline setup
+
+These examples demonstrate how AI agents transform a single requirements document into production-ready applications.
 
 ## 🤝 Contributing
 
