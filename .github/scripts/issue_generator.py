@@ -7,9 +7,19 @@ Ensures minimum number of open issues by generating new ones with Claude AI usin
 import os
 import sys
 import json
-import anyio
+from pathlib import Path
 from github import Github, Auth
-from claude_agent_sdk import query, ClaudeAgentOptions, AssistantMessage, TextBlock
+
+# Add src directory to path to import claude_cli_agent
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src' / 'claude-agent'))
+
+# Import Claude CLI Agent
+try:
+    from claude_cli_agent import ClaudeAgent
+    USE_CLAUDE_CLI = True
+except ImportError:
+    print("⚠️  claude_cli_agent not available")
+    sys.exit(1)
 
 # Configuration
 MIN_ISSUES = int(os.getenv('MIN_OPEN_ISSUES', '3'))
@@ -40,8 +50,8 @@ needed = MIN_ISSUES - issue_count
 print(f"🤖 Generating {needed} new issue(s)...")
 
 
-async def generate_issues():
-    """Use Claude Agent SDK to generate issues"""
+def generate_issues():
+    """Use Claude CLI Agent to generate issues"""
     
     # Get repository context
     print("📖 Analyzing repository for potential issues...")
@@ -95,23 +105,32 @@ Keep descriptions brief and output ONLY the JSON, nothing else."""
 
     print(f"📝 Prompt length: {len(prompt)} chars")
     
-    # Configure Claude Agent SDK
-    options = ClaudeAgentOptions(
-        system_prompt="You are a helpful GitHub issue generator. Always respond with valid JSON only.",
-        max_turns=1,
-        api_key=ANTHROPIC_API_KEY
-    )
-    
-    response_text = ""
-    
-    print("🤖 Calling Claude AI...")
-    async for message in query(prompt=prompt, options=options):
-        if isinstance(message, AssistantMessage):
-            for block in message.content:
-                if isinstance(block, TextBlock):
-                    response_text += block.text
-    
-    print(f"✅ Received response ({len(response_text)} chars)")
+    # Configure Claude CLI Agent
+    try:
+        agent = ClaudeAgent(
+            output_format="text",
+            verbose=False
+        )
+        
+        print("🤖 Calling Claude AI...")
+        result = agent.query(
+            prompt,
+            system_prompt="You are a helpful GitHub issue generator. Always respond with valid JSON only."
+        )
+        
+        # Extract response
+        if isinstance(result, dict) and "result" in result:
+            response_text = result["result"]
+        else:
+            response_text = str(result)
+        
+        print(f"✅ Received response ({len(response_text)} chars)")
+        
+    except Exception as e:
+        print(f"❌ Claude CLI error: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
     
     # Parse response
     try:
@@ -173,5 +192,11 @@ Keep descriptions brief and output ONLY the JSON, nothing else."""
         sys.exit(1)
 
 
-# Run the async function
-anyio.run(generate_issues)
+# Run the function
+try:
+    generate_issues()
+except Exception as e:
+    print(f"❌ Fatal error: {e}")
+    import traceback
+    traceback.print_exc()
+    sys.exit(1)
