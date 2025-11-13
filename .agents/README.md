@@ -1,6 +1,10 @@
-# AI Agent Guidelines & Maintenance
+# AI Agent Guidelines &# .agents Directory
 
-> **This folder contains guidelines for AI agents and repository maintenance documentation**
+> **⚠️ FOR MACHINES ONLY - AI Agents & Automation**
+> 
+> **Human users:** See `/docs` for user documentation
+
+This directory contains AI agent guidelines, automation scripts, and configuration for autonomous development. These files are designed to be read and executed by AI agents and automated systems.
 
 ## For AI Agents
 

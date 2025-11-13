@@ -153,6 +153,8 @@ Check:
 - **Pull Requests tab** - AI-generated code ready for review
 - **Actions tab** - Watch the agents work in real-time
 
+📚 **[Full Documentation →](docs/README.md)**
+
 ## 💡 Why This Changes Everything
 
 ### Traditional Development
