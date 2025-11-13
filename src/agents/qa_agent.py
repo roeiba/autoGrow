@@ -19,6 +19,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 # Import model configuration
 from models_config import CLAUDE_MODELS, SystemPrompts
 
+# Import retry utilities
+from utils.retry import retry_anthropic_call, retry_github_call
+
 # Import Claude CLI Agent or fallback to Anthropic SDK
 try:
     from claude_cli_agent import ClaudeAgent
@@ -105,10 +108,15 @@ class QAAgent:
             "language": self.repo.language,
         }
 
-        # Get recent issues
+        # Get recent issues with retry logic
         print(f"📋 Reviewing {self.max_issues} recent issues...")
         issues = list(
-            self.repo.get_issues(state="all", sort="updated", direction="desc")
+            retry_github_call(
+                self.repo.get_issues,
+                state="all",
+                sort="updated",
+                direction="desc"
+            )
         )[: self.max_issues]
         for issue in issues:
             if issue.pull_request:
@@ -125,11 +133,16 @@ class QAAgent:
                 }
             )
 
-        # Get recent pull requests
+        # Get recent pull requests with retry logic
         print(f"🔀 Reviewing {self.max_prs} recent pull requests...")
-        prs = list(self.repo.get_pulls(state="all", sort="updated", direction="desc"))[
-            : self.max_prs
-        ]
+        prs = list(
+            retry_github_call(
+                self.repo.get_pulls,
+                state="all",
+                sort="updated",
+                direction="desc"
+            )
+        )[: self.max_prs]
         for pr in prs:
             context["pull_requests"].append(
                 {
@@ -145,9 +158,9 @@ class QAAgent:
                 }
             )
 
-        # Get recent commits
+        # Get recent commits with retry logic
         print(f"📝 Reviewing {self.max_commits} recent commits...")
-        commits = list(self.repo.get_commits())[: self.max_commits]
+        commits = list(retry_github_call(self.repo.get_commits))[: self.max_commits]
         for commit in commits:
             context["commits"].append(
                 {
@@ -264,7 +277,9 @@ Output ONLY the JSON, nothing else.
             else:
                 print("🤖 Using Anthropic API...")
                 client = Anthropic(api_key=self.anthropic_api_key)
-                message = client.messages.create(
+                # Use retry logic for Anthropic API calls
+                message = retry_anthropic_call(
+                    client.messages.create,
                     model=CLAUDE_MODELS.QA_ANALYSIS,
                     max_tokens=CLAUDE_MODELS.QA_MAX_TOKENS,
                     system=SystemPrompts.QA_ENGINEER,
@@ -423,11 +438,14 @@ Output ONLY the JSON, nothing else.
             if cat in ["security", "code_quality", "process", "health"]:
                 labels.append(cat)
 
-        # Create the issue
+        # Create the issue with retry logic
         try:
             issue_title = f"QA Report: {summary[:60]}"
-            new_issue = self.repo.create_issue(
-                title=issue_title, body=body, labels=labels
+            new_issue = retry_github_call(
+                self.repo.create_issue,
+                title=issue_title,
+                body=body,
+                labels=labels
             )
             print(f"✅ Created QA issue #{new_issue.number}: {issue_title}")
             return new_issue
