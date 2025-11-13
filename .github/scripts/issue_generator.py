@@ -23,6 +23,7 @@ MIN_ISSUES = int(os.getenv('MIN_OPEN_ISSUES', '3'))
 GITHUB_TOKEN = os.getenv('GITHUB_TOKEN')
 ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 REPO_NAME = os.getenv('REPO_NAME')
+DRY_MODE = os.getenv('DRY_MODE', 'false').lower() in ('true', '1', 'yes')
 
 if not GITHUB_TOKEN or not REPO_NAME:
     print("❌ Missing required environment variables: GITHUB_TOKEN, REPO_NAME")
@@ -43,7 +44,8 @@ try:
     agent = IssueGenerator(
         repo=repo,
         anthropic_api_key=ANTHROPIC_API_KEY,
-        min_issues=MIN_ISSUES
+        min_issues=MIN_ISSUES,
+        dry_mode=DRY_MODE
     )
     
     agent.check_and_generate()

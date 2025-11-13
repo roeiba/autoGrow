@@ -42,16 +42,25 @@ jobs:
         with:
           node-version: '20'
       
-      - name: Install Claude Code CLI
+      - name: Install Claude CLI Agent
         run: |
-          # Install Claude Code CLI if available
-          npm install -g @anthropic-ai/claude-code || echo "Claude CLI not available via npm"
+          echo "🔍 Attempting to install Claude CLI agent..."
+          npm install -g @anthropic-ai/claude-code 2>&1 || {
+            echo "⚠️  Claude CLI not available via npm - will use Anthropic SDK fallback"
+            echo "   Note: Claude CLI may require manual installation from https://code.claude.com/"
+          }
+          # Check if claude command is available
+          if command -v claude &> /dev/null; then
+            echo "✅ Claude CLI installed successfully"
+            claude --version || echo "⚠️  Claude CLI installed but version check failed"
+          else
+            echo "ℹ️  Claude CLI not available - agents will use Anthropic SDK"
+          fi
       
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: |
           pip install PyGithub GitPython anthropic anyio
-          # Install claude-agent-sdk if available
-          pip install claude-agent-sdk || echo "claude-agent-sdk not available, will use anthropic SDK"
+          echo "✅ Python dependencies installed"
       
       - name: Configure Git
         run: |

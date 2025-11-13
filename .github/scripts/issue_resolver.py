@@ -27,6 +27,7 @@ SPECIFIC_ISSUE = os.getenv('SPECIFIC_ISSUE')
 LABELS_TO_HANDLE = os.getenv('ISSUE_LABELS_TO_HANDLE', 'feature,bug,documentation,refactor,test,performance,security,ci/cd,enhancement').split(',')
 LABELS_TO_SKIP = os.getenv('ISSUE_LABELS_TO_SKIP', 'wontfix,duplicate,invalid,in-progress').split(',')
 MAX_TIME = int(os.getenv('MAX_EXECUTION_TIME', '8')) * 60
+DRY_MODE = os.getenv('DRY_MODE', 'false').lower() in ('true', '1', 'yes')
 
 if not GITHUB_TOKEN or not REPO_NAME:
     print("❌ Missing required environment variables: GITHUB_TOKEN, REPO_NAME")
@@ -52,7 +53,8 @@ try:
         anthropic_api_key=ANTHROPIC_API_KEY,
         labels_to_handle=LABELS_TO_HANDLE,
         labels_to_skip=LABELS_TO_SKIP,
-        max_time=MAX_TIME
+        max_time=MAX_TIME,
+        dry_mode=DRY_MODE
     )
     
     specific_issue_num = int(SPECIFIC_ISSUE) if SPECIFIC_ISSUE else None
