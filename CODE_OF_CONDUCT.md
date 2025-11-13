@@ -1,33 +1,23 @@
 # Code of Conduct
 
-## Our Pledge
-
-We pledge to make participation in our project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
-
 ## Our Standards
 
-Examples of behavior that contributes to creating a positive environment include:
+We are committed to providing a welcoming and inclusive environment.
 
-- Using welcoming and inclusive language
-- Being respectful of differing viewpoints and experiences
-- Gracefully accepting constructive criticism
-- Focusing on what is best for the community
-- Showing empathy towards other community members
+**Expected Behavior**:
+- Use welcoming and inclusive language
+- Be respectful of differing viewpoints
+- Accept constructive criticism gracefully
+- Focus on what is best for the community
 
-Examples of unacceptable behavior include:
-
-- The use of sexualized language or imagery and unwelcome sexual attention or advances
-- Trolling, insulting/derogatory comments, and personal or political attacks
-- Public or private harassment
-- Publishing others' private information without explicit permission
-- Other conduct which could reasonably be considered inappropriate in a professional setting
+**Unacceptable Behavior**:
+- Harassment or discriminatory language
+- Personal attacks or trolling
+- Publishing others' private information
+- Other unprofessional conduct
 
 ## Enforcement
 
-Project maintainers are responsible for clarifying standards of acceptable behavior and are expected to take appropriate and fair corrective action in response to any instances of unacceptable behavior.
+Report unacceptable behavior by contacting the project maintainers. All complaints will be reviewed and investigated promptly.
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by contacting the project team. All complaints will be reviewed and investigated promptly and fairly.
-
-## Attribution
-
-This Code of Conduct is adapted from the [Contributor Covenant](https://www.contributor-covenant.org), version 1.4.
+Adapted from the [Contributor Covenant](https://www.contributor-covenant.org).
