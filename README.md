@@ -1,15 +1,15 @@
-# 🌱 Self-Growing AI Project Template
+# 🌱 AutoGrow
 
-> **🤖 The world's first FULLY AUTONOMOUS, SELF-GROWING software project.**  
-> Fork it. Set your keys. Commit. **Watch it build itself forever.**
+> **The world's first FULLY AUTONOMOUS, SELF-GROWING software project.**  
+> Fork it. Set your keys. Commit. **Watch it grow forever.**
 
 [![GitHub stars](https://img.shields.io/github/stars/roeiba/ai-project-template?style=social)](https://github.com/roeiba/ai-project-template)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-## 🚀 What Makes This Revolutionary?
+## 🚀 What Makes AutoGrow Revolutionary?
 
-This is **NOT** a template you fill out once. This is a **LIVING, SELF-GROWING PROJECT** that:
+**AutoGrow** is not a template you fill out once. It's a **LIVING, SELF-GROWING PROJECT** that:
 
 - 🤖 **Generates its own issues** every 10 minutes
 - 🔧 **Fixes those issues automatically** with AI
@@ -31,13 +31,15 @@ Step 1: Fork & Setup          Step 2: Commit                Step 3: Watch It Gro
                               That's it!                    Forever. Autonomously.
 ```
 
-## 🎯 What Is This?
+## 🎯 What Is AutoGrow?
 
-A **self-growing software project** powered by AI agents that:
+**AutoGrow** is a self-growing software project powered by AI agents:
 
 1. **You** describe what you want in `PROJECT_BRIEF.md`
 2. **AI agents** autonomously generate issues, write code, and create PRs
-3. **The project** grows and improves itself 24/7 without human intervention
+3. **Your project** grows and improves itself 24/7 without human intervention
+
+Think of it as **hiring an AI development team that never sleeps.**
 
 ### How It Actually Works
 
@@ -91,8 +93,8 @@ ai-project-template/
 #### **Step 1: Fork This Repository**
 ```bash
 # Click "Fork" on GitHub, then:
-git clone https://github.com/YOUR_USERNAME/ai-project-template.git my-autonomous-project
-cd my-autonomous-project
+git clone https://github.com/YOUR_USERNAME/autogrow.git my-autogrow-project
+cd my-autogrow-project
 ```
 
 #### **Step 2: Describe Your Vision**
