@@ -12,6 +12,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive social media and Reddit launch strategy
 - GitHub repository optimization guidelines
 
+### Enhanced
+- Issue Generator now performs comprehensive project analysis before suggesting issues
+- Added directory structure analysis to understand project organization
+- Added file type analysis to identify technologies and patterns
+- Added code pattern detection for frameworks and tools (Python, Node.js, Docker, CI/CD, etc.)
+- Issue Generator now provides more context-aware and relevant issue suggestions
+
 ## [2.0.1] - 2025-11-11
 
 ### Added
