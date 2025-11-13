@@ -9,7 +9,7 @@ import sys
 import json
 import time
 from datetime import datetime
-from github import Github
+from github import Github, Auth
 from anthropic import Anthropic
 import git
 
@@ -25,10 +25,13 @@ MAX_TIME = int(os.getenv('MAX_EXECUTION_TIME', '8')) * 60
 start_time = time.time()
 
 print("🤖 Issue Resolver Agent Starting")
+print(f"📋 Config: labels_to_handle={LABELS_TO_HANDLE}, labels_to_skip={LABELS_TO_SKIP}")
 
 # Initialize clients
-gh = Github(GITHUB_TOKEN)
+auth = Auth.Token(GITHUB_TOKEN)
+gh = Github(auth=auth)
 repo = gh.get_repo(REPO_NAME)
+print(f"✅ Connected to repository: {REPO_NAME}")
 anthropic = Anthropic(api_key=ANTHROPIC_API_KEY)
 git_repo = git.Repo('.')
 
@@ -104,55 +107,97 @@ Labels: {', '.join(issue_labels)}
 Context:
 {readme}
 
-Provide a fix in JSON format:
+Provide a fix in JSON format. Keep file content concise.
 {{
-  "analysis": "Your analysis",
+  "analysis": "Brief analysis (max 200 chars)",
   "files_to_modify": [
     {{
       "path": "relative/path/to/file",
       "action": "create|modify|delete",
       "content": "Complete file content",
-      "explanation": "Why this change"
+      "explanation": "Brief explanation (max 100 chars)"
     }}
   ],
-  "pr_title": "Concise PR title",
-  "pr_body": "Detailed PR description"
+  "pr_title": "Concise PR title (max 80 chars)",
+  "pr_body": "Brief PR description (max 300 chars)"
 }}
 
-Provide complete, working code."""
+IMPORTANT: Output ONLY the JSON object, no markdown. Keep all text fields brief."""
+
+print(f"📝 Prompt length: {len(prompt)} chars")
 
 # Call Claude
 print("🤖 Calling Claude AI...")
-message = anthropic.messages.create(
-    model="claude-sonnet-4-5",
-    max_tokens=4096,
-    messages=[{"role": "user", "content": prompt}]
-)
-
-response_text = message.content[0].text
-print("✅ Received solution")
+try:
+    message = anthropic.messages.create(
+        model="claude-sonnet-4-5",
+        max_tokens=8192,
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    response_text = message.content[0].text
+    print(f"✅ Received solution ({len(response_text)} chars)")
+    print(f"📊 Token usage - Input: {message.usage.input_tokens}, Output: {message.usage.output_tokens}")
+except Exception as e:
+    print(f"❌ Claude API error: {e}")
+    selected_issue.create_comment(f"❌ Failed to call Claude API: {e}")
+    selected_issue.remove_from_labels('in-progress')
+    sys.exit(1)
 
 # Parse response
 try:
-    if "```json" in response_text:
-        response_text = response_text.split("```json")[1].split("```")[0].strip()
-    elif "```" in response_text:
-        response_text = response_text.split("```")[1].split("```")[0].strip()
+    print("🔍 Parsing Claude response...")
     
-    solution = json.loads(response_text)
+    # Clean up response - remove markdown code blocks if present
+    cleaned_response = response_text.strip()
+    if "```json" in cleaned_response:
+        cleaned_response = cleaned_response.split("```json")[1].split("```")[0].strip()
+        print("📝 Removed ```json``` markers")
+    elif "```" in cleaned_response:
+        cleaned_response = cleaned_response.split("```")[1].split("```")[0].strip()
+        print("📝 Removed ``` markers")
+    
+    # Find JSON object in response
+    start_idx = cleaned_response.find('{')
+    end_idx = cleaned_response.rfind('}') + 1
+    
+    if start_idx == -1 or end_idx == 0:
+        raise ValueError("No JSON object found in response")
+    
+    json_str = cleaned_response[start_idx:end_idx]
+    print(f"📊 Extracted JSON: {len(json_str)} chars")
+    
+    solution = json.loads(json_str)
+    print("✅ Successfully parsed JSON")
     
 except json.JSONDecodeError as e:
     print(f"❌ Failed to parse response: {e}")
-    selected_issue.create_comment(f"❌ Failed to parse AI response. Will retry later.")
+    print(f"📄 Response (first 1000 chars): {response_text[:1000]}")
+    print(f"📄 Response (last 500 chars): {response_text[-500:]}")
+    selected_issue.create_comment(f"❌ Failed to parse AI response. JSON error: {e}\n\nWill retry later.")
+    selected_issue.remove_from_labels('in-progress')
+    sys.exit(1)
+except ValueError as e:
+    print(f"❌ Value error: {e}")
+    print(f"📄 Response: {response_text[:1000]}")
+    selected_issue.create_comment(f"❌ Invalid response format: {e}")
     selected_issue.remove_from_labels('in-progress')
     sys.exit(1)
 
 # Create branch
 branch_name = f"fix/issue-{selected_issue.number}-{int(time.time())}"
 print(f"🌿 Creating branch: {branch_name}")
-git_repo.git.checkout('-b', branch_name)
+try:
+    git_repo.git.checkout('-b', branch_name)
+    print(f"✅ Branch created: {branch_name}")
+except Exception as e:
+    print(f"❌ Failed to create branch: {e}")
+    selected_issue.create_comment(f"❌ Failed to create branch: {e}")
+    selected_issue.remove_from_labels('in-progress')
+    sys.exit(1)
 
 # Apply changes
+print(f"📝 Applying {len(solution.get('files_to_modify', []))} file changes...")
 files_modified = []
 for file_change in solution.get('files_to_modify', []):
     file_path = file_change.get('path')
@@ -168,11 +213,13 @@ for file_change in solution.get('files_to_modify', []):
         if os.path.exists(full_path):
             os.remove(full_path)
             files_modified.append(f"Deleted: {file_path}")
+            print(f"  🗑️  Deleted: {file_path}")
     else:
         os.makedirs(os.path.dirname(full_path), exist_ok=True)
         with open(full_path, 'w') as f:
             f.write(content)
         files_modified.append(f"{action.capitalize()}: {file_path}")
+        print(f"  ✏️  {action.capitalize()}: {file_path} ({len(content)} chars)")
 
 if not files_modified:
     print("⚠️  No files modified")
