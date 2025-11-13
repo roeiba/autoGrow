@@ -55,7 +55,10 @@ jobs:
           make show-os
       
       - name: Run CI flow
-        run: make ci-flow
+        run: |
+          # Run tests from project root, not from src directories
+          cd $GITHUB_WORKSPACE
+          make ci-flow
       
       - name: Upload test results
         if: always()

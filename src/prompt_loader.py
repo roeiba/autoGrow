@@ -14,6 +14,7 @@ class PromptLoader:
         Args:
             prompts_dir: Directory containing prompt templates
         """
+        logger.info(f"Initializing PromptLoader")
         if prompts_dir is None:
             # Default to prompts directory relative to this file
             self.prompts_dir = Path(__file__).parent.parent / 'prompts'

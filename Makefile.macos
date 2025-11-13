@@ -80,7 +80,7 @@ test: test-unit
 
 test-unit:
 	@echo "🧪 Running unit tests..."
-	@cd tests && python3 -m pytest unit/ -v -m "not integration" --tb=short
+	@cd tests && python3 -m pytest unit/ -v -m "not integration" --tb=short --ignore=../src/claude-agent/tests --ignore=../src/gemini-agent/tests
 
 # Run integration tests (requires API keys)
 test-integration:

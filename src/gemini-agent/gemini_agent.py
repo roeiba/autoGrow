@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """
-Gemini Agent - Python wrapper for gemini-cli headless mode
+Gemini Agent - Python wrapper for Gemini CLI in headless mode
 Provides a Python interface to interact with Gemini CLI in agent mode
 """
 
 import json
 import os
 import subprocess
+import sys
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
@@ -20,7 +21,7 @@ class GeminiAgent:
     def __init__(
         self,
         api_key: Optional[str] = None,
-        model: str = "gemini-2.5-pro",
+        model: str = "gemini-pro",
         output_format: str = "json",
         debug: bool = False
     ):
@@ -28,27 +29,36 @@ class GeminiAgent:
         Initialize the Gemini Agent.
         
         Args:
-            api_key: Gemini API key (defaults to GEMINI_API_KEY env var)
-            model: Gemini model to use
+            api_key: Gemini API key (if not provided, uses GEMINI_API_KEY env var)
+            model: Model to use (default: gemini-pro)
             output_format: Output format (json or text)
             debug: Enable debug mode
         """
+        logger.info(f"Initializing GeminiAgent with model={model}, output_format={output_format}")
+        
         self.api_key = api_key or os.getenv("GEMINI_API_KEY")
         if not self.api_key:
-            raise ValueError("GEMINI_API_KEY not set. Please set it in .env or pass it to the constructor.")
+            logger.error("GEMINI_API_KEY not found in environment or constructor")
+            raise RuntimeError(
+                "GEMINI_API_KEY not found. Set it as environment variable or pass to constructor."
+            )
         
         self.model = model
         self.output_format = output_format
         self.debug = debug
         
-        # Check if gemini-cli is installed
+        logger.debug(f"API key configured (length: {len(self.api_key)})")
+        
+        # Check if gemini CLI is installed
         if not self._is_gemini_installed():
+            logger.error("Gemini CLI not found in system PATH")
             raise RuntimeError(
-                "gemini-cli is not installed. Install it with:\n"
-                "  npm install -g @google/gemini-cli\n"
-                "  or\n"
-                "  brew install gemini-cli"
+                "Gemini CLI is not installed. Install it with:\n"
+                "  npm install -g @google/generative-ai-cli\n"
+                "Or visit: https://github.com/google-gemini/gemini-cli"
             )
+        
+        logger.info("GeminiAgent initialized successfully")
     
     def _is_gemini_installed(self) -> bool:
         """Check if gemini-cli is installed."""
@@ -65,9 +75,9 @@ class GeminiAgent:
     def query(
         self,
         prompt: str,
-        include_dirs: Optional[List[str]] = None,
+        model: Optional[str] = None,
         yolo: bool = False,
-        model: Optional[str] = None
+        include_directories: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """
         Send a query to Gemini in headless mode.
