@@ -30,6 +30,7 @@ except ImportError:
 # Import validator and retry utilities
 from utils.project_brief_validator import validate_project_brief
 from utils.retry import retry_github_api
+from utils.outcome_tracker import OutcomeTracker, ResolutionStatus
 
 
 class IssueResolver:
@@ -66,11 +67,15 @@ class IssueResolver:
         self.dry_mode = dry_mode
         self.start_time = time.time()
 
+        # Initialize outcome tracker for feedback loop
+        self.outcome_tracker = OutcomeTracker()
+
         print("🤖 Issue Resolver Agent Initialized")
         print(f"📋 Config:")
         print(f"   - Labels to handle: {self.labels_to_handle}")
         print(f"   - Labels to skip: {self.labels_to_skip}")
         print(f"   - Dry mode: {self.dry_mode}")
+        print(f"   - Outcome tracking: enabled")
         print(
             f"   - Supports: features, bugs, documentation, refactoring, tests, performance, security, CI/CD"
         )
@@ -102,6 +107,17 @@ class IssueResolver:
         print(f"   Title: {selected_issue.title}")
         print(f"   Labels: {[label.name for label in selected_issue.labels]}")
         print(f"   Created: {selected_issue.created_at}")
+
+        # Record attempt in outcome tracker
+        issue_labels = [label.name for label in selected_issue.labels]
+        if not self.dry_mode:
+            self.outcome_tracker.record_attempt(
+                issue_number=selected_issue.number,
+                issue_title=selected_issue.title,
+                labels=issue_labels,
+                status=ResolutionStatus.PENDING
+            )
+            print(f"   📊 Outcome tracking: Recorded attempt")
 
         # Claim the issue
         issue_claimed = self._claim_issue(selected_issue)
@@ -147,6 +163,13 @@ class IssueResolver:
         if summary is None:
             if issue_claimed and not self.dry_mode:
                 selected_issue.create_comment("❌ Failed to generate fix")
+                # Track failure
+                self.outcome_tracker.update_status(
+                    issue_number=selected_issue.number,
+                    status=ResolutionStatus.FAILED,
+                    error_message="Failed to generate fix with Claude AI"
+                )
+                print("   📊 Outcome tracking: Marked as FAILED")
             elif issue_claimed:
                 print("   🔍 DRY MODE: Would post fix generation failure comment")
             return False
@@ -540,6 +563,13 @@ Format your response clearly with sections."""
                 issue.create_comment(
                     "⚠️ No changes were made. The issue may need manual review."
                 )
+                # Track as failed (no changes)
+                self.outcome_tracker.update_status(
+                    issue_number=issue.number,
+                    status=ResolutionStatus.FAILED,
+                    error_message="No file changes generated"
+                )
+                print("   📊 Outcome tracking: Marked as FAILED (no changes)")
             else:
                 print("   🔍 DRY MODE: Would post no changes comment")
             return False
@@ -625,6 +655,15 @@ Closes #{issue.number}
 
         print(f"   ✅ Pull Request created: #{pr.number}")
         print(f"   🔗 URL: {pr.html_url}")
+
+        # Track successful PR creation
+        self.outcome_tracker.update_status(
+            issue_number=issue.number,
+            status=ResolutionStatus.RESOLVED,
+            pr_number=pr.number,
+            files_changed=len(files_modified)
+        )
+        print(f"   📊 Outcome tracking: Marked as RESOLVED (PR #{pr.number})")
 
         # Update issue with retry
         print("\n   💬 Updating issue with results...")

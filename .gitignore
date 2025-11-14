@@ -154,6 +154,9 @@ temp/
 *.sqlite3
 *.db-journal
 
+# AutoGrow feedback loop data (keep local)
+.autogrow/
+
 # ============================================
 # Secrets & Credentials
 # ============================================

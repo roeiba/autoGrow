@@ -18,6 +18,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from models_config import CLAUDE_MODELS, SystemPrompts
 from utils.retry import retry_anthropic_api, retry_github_api
 from utils.deduplication import IssueDuplicateChecker
+from utils.outcome_tracker import OutcomeTracker
+from utils.feedback_analyzer import FeedbackAnalyzer
 
 # Import Claude CLI Agent or fallback to Anthropic SDK
 try:
@@ -52,12 +54,17 @@ class IssueGenerator:
         self.anthropic_api_key = anthropic_api_key
         self.min_issues = min_issues
         self.dry_mode = dry_mode
+
         # Initialize duplicate checker with tuned thresholds
         self.duplicate_checker = IssueDuplicateChecker(
             title_similarity_threshold=0.75,
             body_similarity_threshold=0.60,
             combined_similarity_threshold=0.65,
         )
+
+        # Initialize feedback loop components
+        self.outcome_tracker = OutcomeTracker()
+        self.feedback_analyzer = FeedbackAnalyzer(self.outcome_tracker)
 
     def check_and_generate(self) -> bool:
         """
@@ -118,8 +125,23 @@ class IssueGenerator:
             [f"- {c.commit.message.split(chr(10))[0]}" for c in recent_commits]
         )
 
-        # Build prompt for Claude
-        prompt = self._build_prompt(needed, readme, commit_messages, open_issues)
+        # Get feedback-based generation guidance
+        print("📊 Analyzing feedback data for adaptive generation...")
+        guidance = self.feedback_analyzer.get_generation_guidance()
+        overall_stats = self.outcome_tracker.get_overall_stats()
+
+        if overall_stats['total_attempts'] > 0:
+            print(f"   💡 Historical success rate: {overall_stats['success_rate']:.1%}")
+            print(f"   🎯 {guidance.focus_message}")
+            if guidance.high_priority_types:
+                print(f"   ✅ Prioritizing: {', '.join(guidance.high_priority_types)}")
+            if guidance.low_priority_types:
+                print(f"   ⚠️  De-emphasizing: {', '.join(guidance.low_priority_types)}")
+        else:
+            print("   ℹ️  No historical data yet - using default generation")
+
+        # Build prompt for Claude with adaptive guidance
+        prompt = self._build_prompt(needed, readme, commit_messages, open_issues, guidance)
 
         print(f"📝 Prompt length: {len(prompt)} chars")
 
@@ -134,10 +156,10 @@ class IssueGenerator:
         self._parse_and_create_issues(response_text, needed, open_issues)
 
     def _build_prompt(
-        self, needed: int, readme: str, commit_messages: str, open_issues: List
+        self, needed: int, readme: str, commit_messages: str, open_issues: List, guidance = None
     ) -> str:
-        """Build the prompt for Claude"""
-        return f"""Analyze this GitHub repository and suggest {needed} new issue(s).
+        """Build the prompt for Claude with adaptive guidance"""
+        base_prompt = f"""Analyze this GitHub repository and suggest {needed} new issue(s).
 
 Repository: {self.repo.full_name}
 
@@ -150,8 +172,16 @@ Recent commits:
 Current open issues:
 {chr(10).join([f"- #{i.number}: {i.title}" for i in open_issues[:10]])}
 
-Generate {needed} realistic, actionable issue(s). 
-Read the whole project and find the most important thing for it - from new features, UI, apps, marketing or sales tools to bug fixes, tests, devops etc. 
+Generate {needed} realistic, actionable issue(s).
+Read the whole project and find the most important thing for it - from new features, UI, apps, marketing or sales tools to bug fixes, tests, devops etc."""
+
+        # Add adaptive guidance if available
+        if guidance and guidance.prompt_adjustments and guidance.high_priority_types:
+            base_prompt += f"""
+
+{guidance.prompt_adjustments}"""
+
+        base_prompt += """
 
 Respond with ONLY a JSON object in this exact format:
 {{
@@ -167,6 +197,8 @@ Respond with ONLY a JSON object in this exact format:
 Use appropriate labels: feature, bug, documentation, refactor, test, performance, security, ci/cd
 
 Keep descriptions brief and output ONLY the JSON, nothing else."""
+
+        return base_prompt
 
     def _call_claude(self, prompt: str) -> Optional[str]:
         """Call Claude AI (CLI or API)"""
