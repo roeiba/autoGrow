@@ -49,6 +49,9 @@ except ImportError:
 
     USE_CLAUDE_CLI = False
 
+# Import model configuration
+from models_config import CLAUDE_MODELS
+
 # Import validator and retry utilities
 from utils.project_brief_validator import validate_project_brief
 from utils.retry import retry_github_api
@@ -578,8 +581,8 @@ Format your response clearly with sections."""
             logger.info("Sending query to Claude API...")
 
             response = client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=4096,
+                model=CLAUDE_MODELS.ISSUE_RESOLUTION,
+                max_tokens=CLAUDE_MODELS.WORKFLOW_MAX_TOKENS,
                 messages=[{"role": "user", "content": api_prompt}]
             )
 
