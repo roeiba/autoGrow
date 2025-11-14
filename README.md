@@ -31,6 +31,16 @@ Step 1: Fork & Setup          Step 2: Commit                Step 3: Watch It Gro
                               That's it!                    Forever. Autonomously.
 ```
 
+## 🌟 Live Examples & Inspiration
+
+See real-world projects using AutoGrow methodology:
+
+**[View all AutoGrow forks →](https://github.com/roeiba/AutoGrow/forks)**
+
+These are real projects built by developers who forked AutoGrow and let AI agents grow their codebases autonomously. Browse them for inspiration, see different use cases, and discover how others are leveraging autonomous development.
+
+**Built something with AutoGrow?** We'd love to showcase your project! Fork this repo and your project will automatically appear in the forks list. For featured placement, open an issue or discussion with your project details.
+
 ## 🎯 What Is AutoGrow?
 
 **AutoGrow** is a self-growing software project powered by AI agents:
