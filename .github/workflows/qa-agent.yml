@@ -42,7 +42,7 @@ jobs:
         run: npm install -g @anthropic-ai/claude-code || echo "Claude CLI not available, will use API fallback"
       
       - name: Install dependencies
-        run: pip install anthropic PyGithub GitPython
+        run: pip install -r src/requirements.txt
       
       - name: Run QA Agent
         env:
