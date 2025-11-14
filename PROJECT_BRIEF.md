@@ -33,7 +33,9 @@ the project is a SaaS model in which we charge "costs + 15%" on the operations c
 **Technical details**:
  it connects to all the necessary services and tools to manage the business, including shops, ads, marketing, blog, social media, and more. 
  it uses Cloud flare for dns and cdn, and github for version control and ci/cd, and gcloud for infrastructure. 
- it uses libraries and frameworks smartly.
+ it uses libraries and frameworks smartly. it semantically caches requests, it uses boilerplatee where possible. 
+ root level of the project is kept clean. 
+ .agents is used for managing agents and AI data on each folder. 
+ each other folder is used for different app.
+README.md inside each application folder is used for general information about the application.
 
-
----

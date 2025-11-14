@@ -36,7 +36,7 @@ Step 1: Fork & Setup          Step 2: Commit                Step 3: Watch It Gro
 **AutoGrow** is a self-growing software project powered by AI agents:
 
 1. **You** describe what you want in `PROJECT_BRIEF.md`
-2. **AI agents** autonomously generate issues, write code, and create PRs
+2. **AI agents** autonomously generate all required business entities, deployemnt, monitoring, analytics, marketing and sales and payments and financial management and more.
 3. **Your project** grows and improves itself 24/7 without human intervention
 
 Think of it as **hiring an AI development team that never sleeps.**
