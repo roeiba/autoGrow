@@ -210,9 +210,14 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 if __name__ == "__main__":
     import uvicorn
+    import os
+    
+    # Cloud Run uses PORT environment variable
+    port = int(os.getenv("PORT", config.api_port))
+    
     uvicorn.run(
-        "main:app",
+        app,
         host=config.api_host,
-        port=config.api_port,
-        reload=config.api_debug
+        port=port,
+        log_level="info" if not config.api_debug else "debug"
     )

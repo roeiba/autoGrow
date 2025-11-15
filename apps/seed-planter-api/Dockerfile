@@ -35,12 +35,13 @@ ENV PATH=/root/.local/bin:$PATH
 # Set Python to run in unbuffered mode
 ENV PYTHONUNBUFFERED=1
 
-# Expose port
-EXPOSE 8000
+# Expose port (Cloud Run uses PORT env var, defaults to 8080)
+EXPOSE 8080
+ENV PORT=8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import requests; requests.get('http://localhost:8000/')" || exit 1
+    CMD python -c "import requests; requests.get('http://localhost:8080/')" || exit 1
 
 # Run the application
 CMD ["python", "src/main.py"]
