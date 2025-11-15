@@ -19,7 +19,10 @@ export function useSeedPlanter() {
   }, [])
 
   const connectWebSocket = (projectId) => {
-    const wsUrl = `ws://${window.location.hostname}:8000/api/v1/projects/${projectId}/ws`
+    // Convert HTTP(S) URL to WS(S) URL
+    const apiUrl = new URL(API_BASE_URL)
+    const wsProtocol = apiUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+    const wsUrl = `${wsProtocol}//${apiUrl.host}/api/v1/projects/${projectId}/ws`
     
     try {
       const ws = new WebSocket(wsUrl)
@@ -82,6 +85,19 @@ export function useSeedPlanter() {
     }
   }
 
+  const plantProject = async (projectDescription) => {
+    // Generate a project name from description
+    const projectName = projectDescription
+      .toLowerCase()
+      .replace(/[^a-z0-9\s]/g, '')
+      .trim()
+      .split(/\s+/)
+      .slice(0, 3)
+      .join('-') || 'my-project'
+    
+    return plantSeed(projectName, projectDescription)
+  }
+
   const plantSeed = async (projectName, projectDescription) => {
     setIsPlanting(true)
     setError(null)
@@ -119,6 +135,7 @@ export function useSeedPlanter() {
   }
 
   return {
+    plantProject,
     plantSeed,
     progress,
     error,
