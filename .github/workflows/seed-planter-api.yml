@@ -100,6 +100,9 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:latest
 
       - name: Deploy to Cloud Run
+        env:
+          GITHUB_TOKEN_VALUE: ${{ secrets.PAT_TOKEN }}
+          ANTHROPIC_KEY_VALUE: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
           gcloud run deploy ${{ env.SERVICE_NAME }} \
             --image ${{ env.REGISTRY }}/${{ env.PROJECT_ID }}/${{ env.SERVICE_NAME }}:${{ github.sha }} \
@@ -111,8 +114,8 @@ jobs:
             --memory 512Mi \
             --cpu 1 \
             --timeout 300 \
-            --set-env-vars "API_HOST=0.0.0.0,API_PORT=8000,GCP_PROJECT_ID=${{ env.PROJECT_ID }}" \
-            --update-secrets "GITHUB_TOKEN=PAT_TOKEN:latest,ANTHROPIC_API_KEY=ANTHROPIC_API_KEY:latest,GCP_CREDENTIALS=GCP_CREDENTIALS:latest" \
+            --set-env-vars "API_HOST=0.0.0.0,API_PORT=8000,GCP_PROJECT_ID=${{ env.PROJECT_ID }},GITHUB_TOKEN=${GITHUB_TOKEN_VALUE},ANTHROPIC_API_KEY=${ANTHROPIC_KEY_VALUE},GCP_CREDENTIALS_PATH=/tmp/gcp-creds.json" \
+            --update-secrets "GCP_CREDENTIALS=GCP_CREDENTIALS:latest" \
             --project ${{ env.PROJECT_ID }}
 
       - name: Get Service URL
