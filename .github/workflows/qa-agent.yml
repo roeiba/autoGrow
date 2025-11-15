@@ -10,13 +10,13 @@ on:
     paths:
       - '.github/workflows/qa-agent.yml'
       - '.github/scripts/qa_agent.py'
-      - 'autogrow-core/src/agents/qa_agent.py'
+      - 'seedgpt-core/src/agents/qa_agent.py'
 
   pull_request:
     paths:
       - '.github/workflows/qa-agent.yml'
       - '.github/scripts/qa_agent.py'
-      - 'autogrow-core/src/agents/qa_agent.py'
+      - 'seedgpt-core/src/agents/qa_agent.py'
 
   workflow_dispatch:
 
@@ -55,7 +55,7 @@ jobs:
         continue-on-error: true
       
       - name: Install dependencies
-        run: pip install -r autogrow-core/src/requirements.txt
+        run: pip install -r seedgpt-core/src/requirements.txt
       
       - name: Validate QA Agent (Dry Run)
         env:
@@ -63,7 +63,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           REPO_NAME: ${{ github.repository }}
           PYTHONUNBUFFERED: '1'
-          PYTHONPATH: autogrow-core
+          PYTHONPATH: seedgpt-core
         run: |
           echo "🔍 Validating QA Agent in dry mode..."
           echo "This is a validation run - no issues will be created"
@@ -103,7 +103,7 @@ jobs:
         continue-on-error: true
       
       - name: Install dependencies
-        run: pip install -r autogrow-core/src/requirements.txt
+        run: pip install -r seedgpt-core/src/requirements.txt
       
       - name: Run QA Agent
         env:

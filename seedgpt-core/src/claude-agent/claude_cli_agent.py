@@ -23,7 +23,7 @@ from utils.exceptions import (
     JSONParseError,
     FileNotFoundError as CustomFileNotFoundError,
     FileOperationError,
-    AutoGrowException,
+    SeedGPTException,
 )
 
 logger = get_logger(__name__)
@@ -609,7 +609,7 @@ class ClaudeAgent:
                         {"file": str(file_path), "result": result, "success": True}
                     )
                     logger.info(f"Successfully processed file: {file_path}")
-                except AutoGrowException as e:
+                except SeedGPTException as e:
                     logger.warning(f"Failed to process file {file_path}: {e.message}")
                     results.append(
                         {"file": str(file_path), "error": e.message, "success": False}
@@ -658,8 +658,8 @@ def main():
 
         logger.info("Examples completed successfully")
 
-    except AutoGrowException as e:
-        logger.error(f"AutoGrow error occurred: {e.message}")
+    except SeedGPTException as e:
+        logger.error(f"SeedGPT error occurred: {e.message}")
         if e.details:
             logger.error(f"Error details: {e.details}")
         sys.exit(1)

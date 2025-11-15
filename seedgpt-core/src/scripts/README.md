@@ -1,6 +1,6 @@
-# AutoGrow Scripts
+# SeedGPT Scripts
 
-Utility scripts for managing and monitoring AutoGrow agents.
+Utility scripts for managing and monitoring SeedGPT agents.
 
 ## 📊 Feedback Loop Scripts
 

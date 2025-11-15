@@ -234,7 +234,7 @@ class FeedbackAnalyzer:
 
         lines = [
             "="*80,
-            "📊 AUTOGROW FEEDBACK LOOP REPORT",
+            "📊 SEEDGPT FEEDBACK LOOP REPORT",
             "="*80,
             "",
             "OVERALL STATISTICS:",

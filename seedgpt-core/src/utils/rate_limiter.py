@@ -56,12 +56,12 @@ class RateLimiter:
 
         Args:
             config: Rate limit configuration
-            state_path: Path to state file (defaults to .autogrow/rate_limit_state.json)
+            state_path: Path to state file (defaults to .seedgpt/rate_limit_state.json)
         """
         self.config = config or RateLimitConfig()
 
         if state_path is None:
-            state_path = Path.cwd() / ".autogrow" / "rate_limit_state.json"
+            state_path = Path.cwd() / ".seedgpt" / "rate_limit_state.json"
 
         self.state_path = state_path
         self.state_path.parent.mkdir(parents=True, exist_ok=True)

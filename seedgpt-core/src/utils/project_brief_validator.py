@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 
 from logging_config import get_logger
 from utils.exceptions import (
-    FileNotFoundError as AutoGrowFileNotFoundError,
+    FileNotFoundError as SeedGPTFileNotFoundError,
     FileReadError,
     ProjectBriefValidationError,
     ValidationError,

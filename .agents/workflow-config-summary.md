@@ -31,30 +31,30 @@ I've created a centralized configuration system for GitHub workflows to make pat
 ```yaml
 env:
   # Core paths
-  CORE_DIR: autogrow-core
-  SRC_DIR: autogrow-core/src
-  TESTS_DIR: autogrow-core/tests
-  SCRIPTS_DIR: autogrow-core/scripts
+  CORE_DIR: seedgpt-core
+  SRC_DIR: seedgpt-core/src
+  TESTS_DIR: seedgpt-core/tests
+  SCRIPTS_DIR: seedgpt-core/scripts
   
   # Key files
-  REQUIREMENTS_FILE: autogrow-core/src/requirements.txt
-  TESTS_REQUIREMENTS_FILE: autogrow-core/tests/requirements.txt
+  REQUIREMENTS_FILE: seedgpt-core/src/requirements.txt
+  TESTS_REQUIREMENTS_FILE: seedgpt-core/tests/requirements.txt
   
   # Agent paths
-  CLAUDE_AGENT_DIR: autogrow-core/src/claude-agent
-  GEMINI_AGENT_DIR: autogrow-core/src/gemini-agent
-  AGENTS_DIR: autogrow-core/src/agents
+  CLAUDE_AGENT_DIR: seedgpt-core/src/claude-agent
+  GEMINI_AGENT_DIR: seedgpt-core/src/gemini-agent
+  AGENTS_DIR: seedgpt-core/src/agents
   
   # Test paths
-  TESTS_UNIT_DIR: autogrow-core/tests/unit
-  TESTS_INTEGRATION_DIR: autogrow-core/tests/integration
-  TESTS_CACHE: autogrow-core/tests/.pytest_cache
-  COVERAGE_DIR: autogrow-core/tests/htmlcov
-  COVERAGE_XML: autogrow-core/tests/htmlcov/coverage.xml
+  TESTS_UNIT_DIR: seedgpt-core/tests/unit
+  TESTS_INTEGRATION_DIR: seedgpt-core/tests/integration
+  TESTS_CACHE: seedgpt-core/tests/.pytest_cache
+  COVERAGE_DIR: seedgpt-core/tests/htmlcov
+  COVERAGE_XML: seedgpt-core/tests/htmlcov/coverage.xml
   
   # Script paths
-  CLAUDE_SCRIPTS: autogrow-core/src/claude-agent/scripts
-  GEMINI_SCRIPTS: autogrow-core/src/gemini-agent/scripts
+  CLAUDE_SCRIPTS: seedgpt-core/src/claude-agent/scripts
+  GEMINI_SCRIPTS: seedgpt-core/src/gemini-agent/scripts
 ```
 
 ## How to Use
@@ -65,17 +65,17 @@ Add this to the top of any workflow file:
 
 ```yaml
 env:
-  CORE_DIR: autogrow-core
-  REQUIREMENTS_FILE: autogrow-core/src/requirements.txt
-  TESTS_DIR: autogrow-core/tests
-  COVERAGE_XML: autogrow-core/tests/htmlcov/coverage.xml
+  CORE_DIR: seedgpt-core
+  REQUIREMENTS_FILE: seedgpt-core/src/requirements.txt
+  TESTS_DIR: seedgpt-core/tests
+  COVERAGE_XML: seedgpt-core/tests/htmlcov/coverage.xml
 ```
 
 Then use variables instead of hardcoded paths:
 
 ```yaml
 # Before
-- run: pip install -r autogrow-core/src/requirements.txt
+- run: pip install -r seedgpt-core/src/requirements.txt
 
 # After
 - run: pip install -r ${{ env.REQUIREMENTS_FILE }}
@@ -85,7 +85,7 @@ Then use variables instead of hardcoded paths:
 
 ✅ **Single Source of Truth**: All paths defined in one place  
 ✅ **Easy Updates**: Change path once, applies everywhere  
-✅ **Better Readability**: `${{ env.CORE_DIR }}` is clearer than `autogrow-core`  
+✅ **Better Readability**: `${{ env.CORE_DIR }}` is clearer than `seedgpt-core`  
 ✅ **Reduced Errors**: No typos in repeated paths  
 ✅ **Easier Refactoring**: Update structure without touching every workflow  
 
@@ -94,25 +94,25 @@ Then use variables instead of hardcoded paths:
 ### Before (Hardcoded Paths)
 ```yaml
 - name: Install dependencies
-  run: pip install -r autogrow-core/src/requirements.txt
+  run: pip install -r seedgpt-core/src/requirements.txt
 
 - name: Run tests
   run: |
-    cd autogrow-core
+    cd seedgpt-core
     make test-unit
 
 - name: Upload coverage
   uses: actions/upload-artifact@v4
   with:
-    path: autogrow-core/tests/htmlcov/coverage.xml
+    path: seedgpt-core/tests/htmlcov/coverage.xml
 ```
 
 ### After (With Environment Variables)
 ```yaml
 env:
-  CORE_DIR: autogrow-core
-  REQUIREMENTS_FILE: autogrow-core/src/requirements.txt
-  COVERAGE_XML: autogrow-core/tests/htmlcov/coverage.xml
+  CORE_DIR: seedgpt-core
+  REQUIREMENTS_FILE: seedgpt-core/src/requirements.txt
+  COVERAGE_XML: seedgpt-core/tests/htmlcov/coverage.xml
 
 jobs:
   test:

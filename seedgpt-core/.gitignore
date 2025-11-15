@@ -154,8 +154,8 @@ temp/
 *.sqlite3
 *.db-journal
 
-# AutoGrow feedback loop data (keep local)
-.autogrow/
+# seedgpt feedback loop data (keep local)
+.seedgpt/
 
 # ============================================
 # Secrets & Credentials

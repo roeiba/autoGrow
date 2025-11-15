@@ -58,7 +58,7 @@ jobs:
       
       - name: Install Python dependencies
         run: |
-          pip install -r autogrow-core/src/requirements.txt
+          pip install -r seedgpt-core/src/requirements.txt
           echo "✅ Python dependencies installed"
       
       - name: Run Specialized Agents
@@ -67,7 +67,7 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
-          python autogrow-core/scripts/run_specialized_agents.py \
+          python seedgpt-core/scripts/run_specialized_agents.py \
             --agent ${{ inputs.agent }} \
             --min-issues ${{ inputs.min_issues }} \
             ${{ inputs.dry_mode && '--dry-mode' || '' }}

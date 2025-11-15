@@ -1,35 +1,35 @@
 # CI Workflow Migration Summary
 
 ## Overview
-Updated all GitHub CI workflows to work with the new `autogrow-core` directory structure after project refactoring.
+Updated all GitHub CI workflows to work with the new `seedgpt-core` directory structure after project refactoring.
 
 ## Changes Made
 
 ### 1. GitHub Workflow Files Updated
 
-All workflow files in `.github/workflows/` were updated to use `autogrow-core` paths:
+All workflow files in `.github/workflows/` were updated to use `seedgpt-core` paths:
 
 #### test-agents.yml
-- ✅ Updated path triggers to `autogrow-core/src/gemini-agent/**`, `autogrow-core/src/claude-agent/**`, etc.
-- ✅ Changed working directory to `autogrow-core` for all make commands
-- ✅ Updated artifact paths to `autogrow-core/tests/.pytest_cache/`
-- ✅ Updated coverage paths to `autogrow-core/tests/htmlcov/`
+- ✅ Updated path triggers to `seedgpt-core/src/gemini-agent/**`, `seedgpt-core/src/claude-agent/**`, etc.
+- ✅ Changed working directory to `seedgpt-core` for all make commands
+- ✅ Updated artifact paths to `seedgpt-core/tests/.pytest_cache/`
+- ✅ Updated coverage paths to `seedgpt-core/tests/htmlcov/`
 - ✅ Updated script paths for bash script testing
 
 #### validate-agents.yml
-- ✅ Updated `pip install -r autogrow-core/src/requirements.txt` (3 occurrences)
-- ✅ Updated Python syntax checks to use `autogrow-core/src/agents/`
+- ✅ Updated `pip install -r seedgpt-core/src/requirements.txt` (3 occurrences)
+- ✅ Updated Python syntax checks to use `seedgpt-core/src/agents/`
 - ✅ Updated project structure checks
 - ✅ Updated specialized agents script paths
 
 #### sanity-tests.yml
-- ✅ Updated all directory checks to `autogrow-core/src/`
+- ✅ Updated all directory checks to `seedgpt-core/src/`
 - ✅ Updated Python syntax checks
 - ✅ Updated bash script checks
 
 #### specialized-agents.yml
 - ✅ Updated requirements.txt path
-- ✅ Updated run_specialized_agents.py path to `autogrow-core/scripts/`
+- ✅ Updated run_specialized_agents.py path to `seedgpt-core/scripts/`
 
 #### issue-generator-agent.yml
 - ✅ Updated requirements.txt path
@@ -46,7 +46,7 @@ All workflow files in `.github/workflows/` were updated to use `autogrow-core` p
 
 ✅ **Tested on macOS successfully:**
 ```bash
-cd autogrow-core && make ci-flow
+cd seedgpt-core && make ci-flow
 ```
 
 **Results:**
@@ -63,9 +63,9 @@ cd autogrow-core && make ci-flow
 ai-project-template/
 ├── .agents/                    # Root-level agent configs
 ├── .github/                    # GitHub workflows and scripts
-│   ├── workflows/             # ✅ All updated to use autogrow-core paths
+│   ├── workflows/             # ✅ All updated to use seedgpt-core paths
 │   └── scripts/               # Wrapper scripts (unchanged)
-├── autogrow-core/             # Main codebase (NEW)
+├── seedgpt-core/             # Main codebase (NEW)
 │   ├── src/                   # Source code
 │   │   ├── agents/
 │   │   ├── claude-agent/
@@ -87,21 +87,21 @@ ai-project-template/
 
 | Old Path | New Path |
 |----------|----------|
-| `src/requirements.txt` | `autogrow-core/src/requirements.txt` |
-| `src/agents/` | `autogrow-core/src/agents/` |
-| `src/claude-agent/` | `autogrow-core/src/claude-agent/` |
-| `src/gemini-agent/` | `autogrow-core/src/gemini-agent/` |
-| `tests/` | `autogrow-core/tests/` |
-| `scripts/` | `autogrow-core/scripts/` |
-| `Makefile*` | `autogrow-core/Makefile*` |
+| `src/requirements.txt` | `seedgpt-core/src/requirements.txt` |
+| `src/agents/` | `seedgpt-core/src/agents/` |
+| `src/claude-agent/` | `seedgpt-core/src/claude-agent/` |
+| `src/gemini-agent/` | `seedgpt-core/src/gemini-agent/` |
+| `tests/` | `seedgpt-core/tests/` |
+| `scripts/` | `seedgpt-core/scripts/` |
+| `Makefile*` | `seedgpt-core/Makefile*` |
 
 ### 5. Makefile Targets
 
-All Makefile targets remain the same, but must be run from `autogrow-core/`:
+All Makefile targets remain the same, but must be run from `seedgpt-core/`:
 
 ```bash
 # From project root
-cd autogrow-core
+cd seedgpt-core
 
 # Available targets
 make help                 # Show all targets
@@ -122,7 +122,7 @@ make ci-integration-flow # CI integration test flow
 
 ### Local Verification (✅ Completed)
 ```bash
-cd autogrow-core
+cd seedgpt-core
 make show-os              # Verify OS detection
 make ci-flow              # Run CI flow locally
 ```
@@ -136,9 +136,9 @@ After pushing changes, verify these workflows pass:
 ## Breaking Changes
 
 ⚠️ **Important:** All developers must now:
-1. Run make commands from `autogrow-core/` directory
+1. Run make commands from `seedgpt-core/` directory
 2. Update any local scripts that reference old paths
-3. Update IDE/editor configurations to point to `autogrow-core/`
+3. Update IDE/editor configurations to point to `seedgpt-core/`
 
 ## Next Steps
 
@@ -168,7 +168,7 @@ After pushing changes, verify these workflows pass:
 
 If issues occur, revert by:
 1. `git revert <commit-hash>`
-2. Or manually change all `autogrow-core/` back to root-level paths
+2. Or manually change all `seedgpt-core/` back to root-level paths
 
 ---
 

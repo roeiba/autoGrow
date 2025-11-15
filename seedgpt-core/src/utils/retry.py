@@ -34,9 +34,9 @@ from tenacity.stop import stop_base
 
 from logging_config import get_logger
 from utils.exceptions import (
-    RateLimitError as AutoGrowRateLimitError,
+    RateLimitError as SeedGPTRateLimitError,
     RetryExhaustedError,
-    TimeoutError as AutoGrowTimeoutError,
+    TimeoutError as SeedGPTTimeoutError,
 )
 
 # Get logger

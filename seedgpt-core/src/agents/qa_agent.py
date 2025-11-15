@@ -27,7 +27,7 @@ from utils.retry import retry_github_api
 
 # Import exception classes
 from utils.exceptions import (
-    AutoGrowException,
+    SeedGPTException,
     GitHubAPIError,
     AnthropicAPIError,
     RateLimitError,
@@ -118,8 +118,8 @@ class QAAgent:
         except (GitHubAPIError, AnthropicAPIError) as e:
             logger.error(f"API error during QA check: {e}", exc_info=True)
             return False
-        except AutoGrowException as e:
-            logger.error(f"AutoGrow error during QA check: {e}", exc_info=True)
+        except SeedGPTException as e:
+            logger.error(f"SeedGPT error during QA check: {e}", exc_info=True)
             return False
         except Exception as e:
             logger.exception(f"Unexpected error during QA check: {e}")
@@ -209,7 +209,7 @@ class QAAgent:
 
     def _build_qa_prompt(self, context: Dict) -> str:
         """Build the QA analysis prompt"""
-        prompt = f"""You are a QA engineer reviewing the AutoGrow repository: {self.repo.full_name}
+        prompt = f"""You are a QA engineer reviewing the SeedGPT repository: {self.repo.full_name}
 
 Your job is to analyze recent activity and identify any problems, inconsistencies, or areas of concern.
 

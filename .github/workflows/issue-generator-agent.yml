@@ -55,7 +55,7 @@ jobs:
       
       - name: Install Python dependencies
         run: |
-          pip install -r autogrow-core/src/requirements.txt
+          pip install -r seedgpt-core/src/requirements.txt
           echo "✅ Python dependencies installed"
       
       - name: Run generator

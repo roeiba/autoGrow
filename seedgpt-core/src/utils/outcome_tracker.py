@@ -88,10 +88,10 @@ class OutcomeTracker:
         Initialize outcome tracker
 
         Args:
-            db_path: Path to SQLite database (defaults to .autogrow/outcomes.db)
+            db_path: Path to SQLite database (defaults to .seedgpt/outcomes.db)
         """
         if db_path is None:
-            db_path = Path.cwd() / ".autogrow" / "outcomes.db"
+            db_path = Path.cwd() / ".seedgpt" / "outcomes.db"
 
         self.db_path = db_path
         self.db_path.parent.mkdir(parents=True, exist_ok=True)

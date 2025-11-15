@@ -15,30 +15,30 @@ on:
 # Environment variables available to all workflows
 env:
   # Core paths
-  CORE_DIR: autogrow-core
-  SRC_DIR: autogrow-core/src
-  TESTS_DIR: autogrow-core/tests
-  SCRIPTS_DIR: autogrow-core/scripts
+  CORE_DIR: seedgpt-core
+  SRC_DIR: seedgpt-core/src
+  TESTS_DIR: seedgpt-core/tests
+  SCRIPTS_DIR: seedgpt-core/scripts
   
   # Key files
-  REQUIREMENTS_FILE: autogrow-core/src/requirements.txt
-  TESTS_REQUIREMENTS_FILE: autogrow-core/tests/requirements.txt
+  REQUIREMENTS_FILE: seedgpt-core/src/requirements.txt
+  TESTS_REQUIREMENTS_FILE: seedgpt-core/tests/requirements.txt
   
   # Agent paths
-  CLAUDE_AGENT_DIR: autogrow-core/src/claude-agent
-  GEMINI_AGENT_DIR: autogrow-core/src/gemini-agent
-  AGENTS_DIR: autogrow-core/src/agents
+  CLAUDE_AGENT_DIR: seedgpt-core/src/claude-agent
+  GEMINI_AGENT_DIR: seedgpt-core/src/gemini-agent
+  AGENTS_DIR: seedgpt-core/src/agents
   
   # Test paths
-  TESTS_UNIT_DIR: autogrow-core/tests/unit
-  TESTS_INTEGRATION_DIR: autogrow-core/tests/integration
-  TESTS_CACHE_DIR: autogrow-core/tests/.pytest_cache
-  COVERAGE_DIR: autogrow-core/tests/htmlcov
-  COVERAGE_XML: autogrow-core/tests/htmlcov/coverage.xml
+  TESTS_UNIT_DIR: seedgpt-core/tests/unit
+  TESTS_INTEGRATION_DIR: seedgpt-core/tests/integration
+  TESTS_CACHE_DIR: seedgpt-core/tests/.pytest_cache
+  COVERAGE_DIR: seedgpt-core/tests/htmlcov
+  COVERAGE_XML: seedgpt-core/tests/htmlcov/coverage.xml
   
   # Script paths
-  CLAUDE_SCRIPTS_DIR: autogrow-core/src/claude-agent/scripts
-  GEMINI_SCRIPTS_DIR: autogrow-core/src/gemini-agent/scripts
+  CLAUDE_SCRIPTS_DIR: seedgpt-core/src/claude-agent/scripts
+  GEMINI_SCRIPTS_DIR: seedgpt-core/src/gemini-agent/scripts
 
 # YAML anchors for reusable path patterns
 # Note: These are for documentation - GitHub Actions doesn't support anchors across files
@@ -46,11 +46,11 @@ env:
 
 # Path patterns for triggers:
 # paths:
-#   - 'autogrow-core/src/gemini-agent/**'
-#   - 'autogrow-core/src/claude-agent/**'
-#   - 'autogrow-core/src/agents/**'
-#   - 'autogrow-core/tests/**'
-#   - 'autogrow-core/Makefile*'
+#   - 'seedgpt-core/src/gemini-agent/**'
+#   - 'seedgpt-core/src/claude-agent/**'
+#   - 'seedgpt-core/src/agents/**'
+#   - 'seedgpt-core/tests/**'
+#   - 'seedgpt-core/Makefile*'
 #   - '.github/workflows/**'
 
 jobs:

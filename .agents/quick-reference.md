@@ -2,11 +2,11 @@
 
 ## Running Tests Locally
 
-All commands must be run from the `autogrow-core` directory:
+All commands must be run from the `seedgpt-core` directory:
 
 ```bash
-# Navigate to autogrow-core
-cd autogrow-core
+# Navigate to seedgpt-core
+cd seedgpt-core
 
 # Run unit tests (fast, no API calls)
 make test-unit
@@ -30,9 +30,9 @@ make clean
 ai-project-template/
 ├── .agents/                    # Agent configurations
 ├── .github/                    # CI/CD workflows ✅ UPDATED
-│   ├── workflows/             # All workflows use autogrow-core paths
+│   ├── workflows/             # All workflows use seedgpt-core paths
 │   └── scripts/               # Wrapper scripts
-├── autogrow-core/             # 🆕 Main codebase
+├── seedgpt-core/             # 🆕 Main codebase
 │   ├── src/                   # Source code
 │   ├── tests/                 # Test suite
 │   ├── scripts/               # Utility scripts
@@ -46,12 +46,12 @@ ai-project-template/
 
 ### ✅ Updated Files
 - All `.github/workflows/*.yml` files
-- All paths now reference `autogrow-core/`
+- All paths now reference `seedgpt-core/`
 
 ### ⚠️ Important
-- Run `make` commands from `autogrow-core/` directory
+- Run `make` commands from `seedgpt-core/` directory
 - Update any local scripts to use new paths
-- Update IDE configurations to point to `autogrow-core/`
+- Update IDE configurations to point to `seedgpt-core/`
 
 ## GitHub Actions Status
 
@@ -78,7 +78,7 @@ After pushing, these workflows should pass:
 1. Commit changes:
    ```bash
    git add .github/workflows/ .agents/
-   git commit -m "fix: update CI workflows for autogrow-core structure"
+   git commit -m "fix: update CI workflows for seedgpt-core structure"
    ```
 
 2. Push to GitHub:
@@ -94,7 +94,7 @@ After pushing, these workflows should pass:
 
 ### If tests fail locally:
 ```bash
-cd autogrow-core
+cd seedgpt-core
 make clean
 make install-test-deps
 make test-unit
@@ -102,8 +102,8 @@ make test-unit
 
 ### If GitHub Actions fail:
 - Check workflow logs for specific errors
-- Verify all paths use `autogrow-core/` prefix
-- Ensure requirements.txt is at `autogrow-core/src/requirements.txt`
+- Verify all paths use `seedgpt-core/` prefix
+- Ensure requirements.txt is at `seedgpt-core/src/requirements.txt`
 
 ## Documentation
 

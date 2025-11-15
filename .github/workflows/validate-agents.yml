@@ -31,7 +31,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -r autogrow-core/src/requirements.txt
+          pip install -r seedgpt-core/src/requirements.txt
       
       - name: Configure Git
         run: |
@@ -52,7 +52,7 @@ jobs:
       - name: Check Python syntax
         run: |
           echo "🔍 Checking Python syntax..."
-          python -m py_compile autogrow-core/src/agents/issue_resolver.py
+          python -m py_compile seedgpt-core/src/agents/issue_resolver.py
           python -m py_compile .github/scripts/issue_resolver.py
           echo "✅ Issue Resolver syntax OK"
 
@@ -70,7 +70,7 @@ jobs:
       
       - name: Install dependencies
         run: |
-          pip install -r autogrow-core/src/requirements.txt
+          pip install -r seedgpt-core/src/requirements.txt
       
       - name: Validate Issue Generator (Dry Mode)
         env:
@@ -86,7 +86,7 @@ jobs:
       - name: Check Python syntax
         run: |
           echo "🔍 Checking Python syntax..."
-          python -m py_compile autogrow-core/src/agents/issue_generator.py
+          python -m py_compile seedgpt-core/src/agents/issue_generator.py
           python -m py_compile .github/scripts/issue_generator.py
           echo "✅ Issue Generator syntax OK"
 
@@ -107,13 +107,13 @@ jobs:
           echo "🔍 Checking project structure..."
           
           # Check main directories exist
-          test -d autogrow-core/src/agents && echo "✅ Agents directory exists" || (echo "❌ Agents directory missing" && exit 1)
+          test -d seedgpt-core/src/agents && echo "✅ Agents directory exists" || (echo "❌ Agents directory missing" && exit 1)
           test -d .github/workflows && echo "✅ Workflows directory exists" || (echo "❌ Workflows directory missing" && exit 1)
           test -d .github/scripts && echo "✅ Scripts directory exists" || (echo "❌ Scripts directory missing" && exit 1)
           
           # Check key files exist
-          test -f autogrow-core/src/agents/issue_resolver.py && echo "✅ Issue Resolver exists" || (echo "❌ Issue Resolver missing" && exit 1)
-          test -f autogrow-core/src/agents/issue_generator.py && echo "✅ Issue Generator exists" || (echo "❌ Issue Generator missing" && exit 1)
+          test -f seedgpt-core/src/agents/issue_resolver.py && echo "✅ Issue Resolver exists" || (echo "❌ Issue Resolver missing" && exit 1)
+          test -f seedgpt-core/src/agents/issue_generator.py && echo "✅ Issue Generator exists" || (echo "❌ Issue Generator missing" && exit 1)
           test -f .github/scripts/issue_resolver.py && echo "✅ Issue Resolver wrapper exists" || (echo "❌ Issue Resolver wrapper missing" && exit 1)
           test -f .github/scripts/issue_generator.py && echo "✅ Issue Generator wrapper exists" || (echo "❌ Issue Generator wrapper missing" && exit 1)
       
@@ -121,8 +121,8 @@ jobs:
         run: |
           echo "🔍 Checking Python syntax for all agent files..."
           
-          # Check all Python files in autogrow-core/src/agents
-          for file in autogrow-core/src/agents/*.py; do
+          # Check all Python files in seedgpt-core/src/agents
+          for file in seedgpt-core/src/agents/*.py; do
             if [ -f "$file" ]; then
               python -m py_compile "$file" && echo "✅ $(basename $file) syntax OK" || (echo "❌ $(basename $file) syntax error" && exit 1)
             fi
@@ -149,7 +149,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r autogrow-core/src/requirements.txt
+          pip install -r seedgpt-core/src/requirements.txt
 
       - name: Validate Marketing/Product/Sales Agents (Dry Mode)
         env:
@@ -158,13 +158,13 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: |
           echo "🔍 Validating Marketing Agent (dry mode)..."
-          python autogrow-core/scripts/run_specialized_agents.py --agent marketing --dry-mode || echo "⚠️ Marketing agent validation completed with warnings (expected in dry mode)"
+          python seedgpt-core/scripts/run_specialized_agents.py --agent marketing --dry-mode || echo "⚠️ Marketing agent validation completed with warnings (expected in dry mode)"
 
           echo "🔍 Validating Product Agent (dry mode)..."
-          python autogrow-core/scripts/run_specialized_agents.py --agent product --dry-mode || echo "⚠️ Product agent validation completed with warnings (expected in dry mode)"
+          python seedgpt-core/scripts/run_specialized_agents.py --agent product --dry-mode || echo "⚠️ Product agent validation completed with warnings (expected in dry mode)"
 
           echo "🔍 Validating Sales Agent (dry mode)..."
-          python autogrow-core/scripts/run_specialized_agents.py --agent sales --dry-mode || echo "⚠️ Sales agent validation completed with warnings (expected in dry mode)"
+          python seedgpt-core/scripts/run_specialized_agents.py --agent sales --dry-mode || echo "⚠️ Sales agent validation completed with warnings (expected in dry mode)"
 
   summary:
     runs-on: ubuntu-latest

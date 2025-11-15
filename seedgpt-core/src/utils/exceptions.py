@@ -1,13 +1,13 @@
 """
-Custom exception hierarchy for AutoGrow project.
+Custom exception hierarchy for SeedGPT project.
 
 Provides specific exception types for better error handling and debugging.
-All exceptions inherit from a base AutoGrowException for easy catching.
+All exceptions inherit from a base SeedGPTException for easy catching.
 """
 
 
-class AutoGrowException(Exception):
-    """Base exception for all AutoGrow errors."""
+class SeedGPTException(Exception):
+    """Base exception for all SeedGPT errors."""
 
     def __init__(self, message: str, details: dict = None):
         """
@@ -32,7 +32,7 @@ class AutoGrowException(Exception):
 # Configuration and Setup Errors
 # ============================================================================
 
-class ConfigurationError(AutoGrowException):
+class ConfigurationError(SeedGPTException):
     """Raised when configuration is invalid or missing."""
     pass
 
@@ -56,7 +56,7 @@ class InvalidConfigurationError(ConfigurationError):
 # API and External Service Errors
 # ============================================================================
 
-class APIError(AutoGrowException):
+class APIError(SeedGPTException):
     """Base class for API-related errors."""
     pass
 
@@ -121,7 +121,7 @@ class CreditBalanceError(APIError):
 # Git and Repository Errors
 # ============================================================================
 
-class GitError(AutoGrowException):
+class GitError(SeedGPTException):
     """Base class for Git-related errors."""
     pass
 
@@ -161,7 +161,7 @@ class DirtyWorkingTreeError(GitError):
 # Issue and PR Management Errors
 # ============================================================================
 
-class IssueError(AutoGrowException):
+class IssueError(SeedGPTException):
     """Base class for issue-related errors."""
     pass
 
@@ -197,7 +197,7 @@ class DuplicateIssueError(IssueError):
         self.existing_issue_number = existing_issue_number
 
 
-class PullRequestError(AutoGrowException):
+class PullRequestError(SeedGPTException):
     """Base class for pull request errors."""
     pass
 
@@ -216,7 +216,7 @@ class PRUpdateError(PullRequestError):
 # AI Agent Errors
 # ============================================================================
 
-class AgentError(AutoGrowException):
+class AgentError(SeedGPTException):
     """Base class for AI agent errors."""
     pass
 
@@ -260,7 +260,7 @@ class JSONParseError(AgentError):
 # Validation and Data Errors
 # ============================================================================
 
-class ValidationError(AutoGrowException):
+class ValidationError(SeedGPTException):
     """Raised when validation fails."""
     pass
 
@@ -295,7 +295,7 @@ class InvalidLabelError(ValidationError):
 # File and I/O Errors
 # ============================================================================
 
-class FileOperationError(AutoGrowException):
+class FileOperationError(SeedGPTException):
     """Base class for file operation errors."""
     pass
 
@@ -325,7 +325,7 @@ class FileWriteError(FileOperationError):
 # Retry and Timeout Errors
 # ============================================================================
 
-class RetryExhaustedError(AutoGrowException):
+class RetryExhaustedError(SeedGPTException):
     """Raised when retry attempts are exhausted."""
 
     def __init__(self, operation: str, attempts: int, last_error: Exception = None):
@@ -342,7 +342,7 @@ class RetryExhaustedError(AutoGrowException):
         self.last_error = last_error
 
 
-class TimeoutError(AutoGrowException):
+class TimeoutError(SeedGPTException):
     """Raised when operation times out."""
 
     def __init__(self, operation: str, timeout_seconds: int):

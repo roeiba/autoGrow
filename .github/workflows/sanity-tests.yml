@@ -25,43 +25,43 @@ jobs:
           echo "🔍 Checking project structure..."
           
           # Check main directories exist
-          test -d autogrow-core/src/claude-agent && echo "✅ Claude agent directory exists" || echo "❌ Claude agent directory missing"
-          test -d autogrow-core/src/gemini-agent && echo "✅ Gemini agent directory exists" || echo "❌ Gemini agent directory missing"
-          test -d autogrow-core/tests && echo "✅ Tests directory exists" || echo "❌ Tests directory missing"
+          test -d seedgpt-core/src/claude-agent && echo "✅ Claude agent directory exists" || echo "❌ Claude agent directory missing"
+          test -d seedgpt-core/src/gemini-agent && echo "✅ Gemini agent directory exists" || echo "❌ Gemini agent directory missing"
+          test -d seedgpt-core/tests && echo "✅ Tests directory exists" || echo "❌ Tests directory missing"
           test -d .github/workflows && echo "✅ Workflows directory exists" || echo "❌ Workflows directory missing"
           
           # Check key files exist
-          test -f autogrow-core/src/claude-agent/claude_cli_agent.py && echo "✅ Claude CLI agent exists" || echo "❌ Claude CLI agent missing"
-          test -f autogrow-core/src/gemini-agent/gemini_agent.py && echo "✅ Gemini agent exists" || echo "❌ Gemini agent missing"
-          test -f autogrow-core/tests/unit/test_claude_cli_agent.py && echo "✅ Claude unit tests exist" || echo "❌ Claude unit tests missing"
-          test -f autogrow-core/tests/unit/test_gemini_agent.py && echo "✅ Gemini unit tests exist" || echo "❌ Gemini unit tests missing"
+          test -f seedgpt-core/src/claude-agent/claude_cli_agent.py && echo "✅ Claude CLI agent exists" || echo "❌ Claude CLI agent missing"
+          test -f seedgpt-core/src/gemini-agent/gemini_agent.py && echo "✅ Gemini agent exists" || echo "❌ Gemini agent missing"
+          test -f seedgpt-core/tests/unit/test_claude_cli_agent.py && echo "✅ Claude unit tests exist" || echo "❌ Claude unit tests missing"
+          test -f seedgpt-core/tests/unit/test_gemini_agent.py && echo "✅ Gemini unit tests exist" || echo "❌ Gemini unit tests missing"
       
       - name: Check Python syntax
         run: |
           echo "🔍 Checking Python syntax..."
           
           # Check Claude agent
-          python -m py_compile autogrow-core/src/claude-agent/claude_cli_agent.py && echo "✅ Claude agent syntax OK" || echo "❌ Claude agent syntax error"
+          python -m py_compile seedgpt-core/src/claude-agent/claude_cli_agent.py && echo "✅ Claude agent syntax OK" || echo "❌ Claude agent syntax error"
           
           # Check Gemini agent
-          python -m py_compile autogrow-core/src/gemini-agent/gemini_agent.py && echo "✅ Gemini agent syntax OK" || echo "❌ Gemini agent syntax error"
+          python -m py_compile seedgpt-core/src/gemini-agent/gemini_agent.py && echo "✅ Gemini agent syntax OK" || echo "❌ Gemini agent syntax error"
           
           # Check logging config
-          test -f autogrow-core/src/logging_config.py && python -m py_compile autogrow-core/src/logging_config.py && echo "✅ Logging config syntax OK" || echo "⚠️ Logging config not found or has syntax error"
+          test -f seedgpt-core/src/logging_config.py && python -m py_compile seedgpt-core/src/logging_config.py && echo "✅ Logging config syntax OK" || echo "⚠️ Logging config not found or has syntax error"
       
       - name: Check bash scripts
         run: |
           echo "🔍 Checking bash scripts..."
           
           # Check Claude scripts
-          for script in autogrow-core/src/claude-agent/scripts/*.sh; do
+          for script in seedgpt-core/src/claude-agent/scripts/*.sh; do
             if [ -f "$script" ]; then
               bash -n "$script" && echo "✅ $(basename $script) syntax OK" || echo "❌ $(basename $script) syntax error"
             fi
           done
           
           # Check Gemini scripts
-          for script in autogrow-core/src/gemini-agent/scripts/*.sh; do
+          for script in seedgpt-core/src/gemini-agent/scripts/*.sh; do
             if [ -f "$script" ]; then
               bash -n "$script" && echo "✅ $(basename $script) syntax OK" || echo "❌ $(basename $script) syntax error"
             fi

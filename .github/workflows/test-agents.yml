@@ -6,20 +6,20 @@ name: Test AI Agents
       - main
       - develop
     paths:
-      - 'autogrow-core/src/gemini-agent/**'
-      - 'autogrow-core/src/claude-agent/**'
-      - 'autogrow-core/tests/**'
-      - 'autogrow-core/Makefile*'
+      - 'seedgpt-core/src/gemini-agent/**'
+      - 'seedgpt-core/src/claude-agent/**'
+      - 'seedgpt-core/tests/**'
+      - 'seedgpt-core/Makefile*'
       - '.github/workflows/test-agents.yml'
   pull_request:
     branches:
       - main
       - develop
     paths:
-      - 'autogrow-core/src/gemini-agent/**'
-      - 'autogrow-core/src/claude-agent/**'
-      - 'autogrow-core/tests/**'
-      - 'autogrow-core/Makefile*'
+      - 'seedgpt-core/src/gemini-agent/**'
+      - 'seedgpt-core/src/claude-agent/**'
+      - 'seedgpt-core/tests/**'
+      - 'seedgpt-core/Makefile*'
   workflow_dispatch:
     inputs:
       run_integration_tests:
@@ -52,12 +52,12 @@ jobs:
           echo "OS: ${{ matrix.os }}"
           echo "Python: ${{ matrix.python-version }}"
           python --version
-          cd autogrow-core && make show-os
+          cd seedgpt-core && make show-os
       
       - name: Run CI flow
         run: |
-          # Run tests from autogrow-core directory
-          cd autogrow-core
+          # Run tests from seedgpt-core directory
+          cd seedgpt-core
           make ci-flow
       
       - name: Upload test results
@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results-${{ matrix.os }}-py${{ matrix.python-version }}
-          path: autogrow-core/tests/.pytest_cache/
+          path: seedgpt-core/tests/.pytest_cache/
           retention-days: 7
 
   test-integration:
@@ -97,7 +97,7 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          cd autogrow-core
+          cd seedgpt-core
           make ci-integration-flow
         continue-on-error: true
       
@@ -106,7 +106,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: integration-test-results-${{ matrix.os }}
-          path: autogrow-core/tests/.pytest_cache/
+          path: seedgpt-core/tests/.pytest_cache/
           retention-days: 7
 
   test-coverage:
@@ -125,28 +125,28 @@ jobs:
       
       - name: Install dependencies and run coverage
         run: |
-          cd autogrow-core
+          cd seedgpt-core
           make install-test-deps
           make test-coverage
       
       - name: Verify coverage file exists
         run: |
-          if [ -f "./autogrow-core/tests/htmlcov/coverage.xml" ]; then
+          if [ -f "./seedgpt-core/tests/htmlcov/coverage.xml" ]; then
             echo "✅ Coverage XML file generated successfully"
-            ls -lh ./autogrow-core/tests/htmlcov/coverage.xml
+            ls -lh ./seedgpt-core/tests/htmlcov/coverage.xml
           else
             echo "⚠️ Coverage XML file not found"
             echo "Contents of tests directory:"
-            ls -la ./autogrow-core/tests/ || true
+            ls -la ./seedgpt-core/tests/ || true
             echo "Contents of tests/htmlcov directory:"
-            ls -la ./autogrow-core/tests/htmlcov/ || true
+            ls -la ./seedgpt-core/tests/htmlcov/ || true
           fi
       
       - name: Upload coverage to Codecov
-        if: hashFiles('./autogrow-core/tests/htmlcov/coverage.xml') != ''
+        if: hashFiles('./seedgpt-core/tests/htmlcov/coverage.xml') != ''
         uses: codecov/codecov-action@v4
         with:
-          files: ./autogrow-core/tests/htmlcov/coverage.xml
+          files: ./seedgpt-core/tests/htmlcov/coverage.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: false
@@ -156,7 +156,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: autogrow-core/tests/htmlcov/
+          path: seedgpt-core/tests/htmlcov/
           retention-days: 30
           if-no-files-found: warn
 
@@ -176,7 +176,7 @@ jobs:
       
       - name: Run code quality checks
         run: |
-          cd autogrow-core
+          cd seedgpt-core
           make install-test-deps
           make lint
           make format
@@ -196,24 +196,24 @@ jobs:
       
       - name: Make scripts executable
         run: |
-          chmod +x autogrow-core/src/gemini-agent/scripts/*.sh
-          chmod +x autogrow-core/src/claude-agent/scripts/*.sh
+          chmod +x seedgpt-core/src/gemini-agent/scripts/*.sh
+          chmod +x seedgpt-core/src/claude-agent/scripts/*.sh
       
       - name: Test script syntax
         run: |
-          for script in autogrow-core/src/gemini-agent/scripts/*.sh; do
+          for script in seedgpt-core/src/gemini-agent/scripts/*.sh; do
             echo "Checking $script"
             bash -n "$script"
           done
-          for script in autogrow-core/src/claude-agent/scripts/*.sh; do
+          for script in seedgpt-core/src/claude-agent/scripts/*.sh; do
             echo "Checking $script"
             bash -n "$script"
           done
       
       - name: Test help commands
         run: |
-          autogrow-core/src/gemini-agent/scripts/agent_runner.sh --help || true
-          autogrow-core/src/claude-agent/scripts/agent_runner_cli.sh --help || true
+          seedgpt-core/src/gemini-agent/scripts/agent_runner.sh --help || true
+          seedgpt-core/src/claude-agent/scripts/agent_runner_cli.sh --help || true
 
   summary:
     name: Test Summary

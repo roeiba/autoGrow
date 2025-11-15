@@ -10,20 +10,20 @@ on:
       - main
       - develop
     paths:
-      - 'autogrow-core/src/gemini-agent/**'
-      - 'autogrow-core/src/claude-agent/**'
-      - 'autogrow-core/tests/**'
-      - 'autogrow-core/Makefile*'
+      - 'seedgpt-core/src/gemini-agent/**'
+      - 'seedgpt-core/src/claude-agent/**'
+      - 'seedgpt-core/tests/**'
+      - 'seedgpt-core/Makefile*'
       - '.github/workflows/test-agents.yml'
   pull_request:
     branches:
       - main
       - develop
     paths:
-      - 'autogrow-core/src/gemini-agent/**'
-      - 'autogrow-core/src/claude-agent/**'
-      - 'autogrow-core/tests/**'
-      - 'autogrow-core/Makefile*'
+      - 'seedgpt-core/src/gemini-agent/**'
+      - 'seedgpt-core/src/claude-agent/**'
+      - 'seedgpt-core/tests/**'
+      - 'seedgpt-core/Makefile*'
   workflow_dispatch:
     inputs:
       run_integration_tests:
@@ -35,23 +35,23 @@ on:
 # Centralized path configuration
 env:
   # Core paths
-  CORE_DIR: autogrow-core
-  SRC_DIR: autogrow-core/src
-  TESTS_DIR: autogrow-core/tests
+  CORE_DIR: seedgpt-core
+  SRC_DIR: seedgpt-core/src
+  TESTS_DIR: seedgpt-core/tests
   
   # Key files
-  REQUIREMENTS_FILE: autogrow-core/src/requirements.txt
+  REQUIREMENTS_FILE: seedgpt-core/src/requirements.txt
   
   # Test paths
-  TESTS_CACHE: autogrow-core/tests/.pytest_cache
-  COVERAGE_DIR: autogrow-core/tests/htmlcov
-  COVERAGE_XML: autogrow-core/tests/htmlcov/coverage.xml
+  TESTS_CACHE: seedgpt-core/tests/.pytest_cache
+  COVERAGE_DIR: seedgpt-core/tests/htmlcov
+  COVERAGE_XML: seedgpt-core/tests/htmlcov/coverage.xml
   
   # Agent paths
-  CLAUDE_AGENT_DIR: autogrow-core/src/claude-agent
-  GEMINI_AGENT_DIR: autogrow-core/src/gemini-agent
-  CLAUDE_SCRIPTS: autogrow-core/src/claude-agent/scripts
-  GEMINI_SCRIPTS: autogrow-core/src/gemini-agent/scripts
+  CLAUDE_AGENT_DIR: seedgpt-core/src/claude-agent
+  GEMINI_AGENT_DIR: seedgpt-core/src/gemini-agent
+  CLAUDE_SCRIPTS: seedgpt-core/src/claude-agent/scripts
+  GEMINI_SCRIPTS: seedgpt-core/src/gemini-agent/scripts
 
 jobs:
   test-unit:

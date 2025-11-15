@@ -25,7 +25,7 @@ logger = get_logger(__name__)
 
 def main():
     parser = argparse.ArgumentParser(
-        description="View AutoGrow feedback loop metrics"
+        description="View SeedGPT feedback loop metrics"
     )
     parser.add_argument(
         "--recent",

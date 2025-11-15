@@ -1,6 +1,6 @@
 ## 🎯 Project Overview
 
-**Project Name**: AutoGrow
+**Project Name**: SeedGPT
 
 The goal: To make profitable project that can grow autonomously.
 
@@ -16,7 +16,7 @@ no body wants to write code, documentation, tests, infrastructure code, or any o
 anyone who wants the computer do to something. 
 
 **Proposed Solution**:
-AutoGrow uses AI agents to continuously generate issues, write code, create pull requests,
+SeedGPT uses AI agents to continuously generate issues, write code, create pull requests,
 and monitor quality - all automatically. under this loop of tasks, it manages all aspects of the business, including deployment, analysis, analytics, marketing and sales. 
 
 Once completed, this project can be considered as a stem cell for any other project. 

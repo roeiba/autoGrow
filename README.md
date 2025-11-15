@@ -1,15 +1,15 @@
-# 🌱 AutoGrow
+# 🌱 SeedGPT
 
 > **Your project that codes itself.**  
 > Describe what you want. AI builds it. Forever.
 
-[![GitHub stars](https://img.shields.io/github/stars/roeiba/autoGrow?style=social)](https://github.com/roeiba/autoGrow)
+[![GitHub stars](https://img.shields.io/github/stars/roeiba/seedGPT?style=social)](https://github.com/roeiba/seedGPT)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
 ## What is this?
 
-AutoGrow is a project that grows itself using AI. You describe what you want, and AI agents automatically:
+SeedGPT is a project that grows itself using AI. You describe what you want, and AI agents automatically:
 
 - Generate tasks (as GitHub issues)
 - Write the code to solve them
@@ -20,9 +20,9 @@ Think of it as having a development team that never stops working.
 
 ## See it in action
 
-**[View Live Examples →](https://roeiba.github.io/AutoGrow/)**
+**[View Live Examples →](https://roeiba.github.io/SeedGPT/)**
 
-Browse real projects built with AutoGrow. See what others are building and get inspired.
+Browse real projects built with SeedGPT. See what others are building and get inspired.
 
 ## Why use this?
 
@@ -34,7 +34,7 @@ The result? Your project grows while you sleep.
 
 ## Works with any tech
 
-AutoGrow supports whatever you want to build:
+SeedGPT supports whatever you want to build:
 - **Backend:** Node.js, Python, Go, Java, etc.
 - **Frontend:** React, Vue, Angular, etc.
 - **Mobile:** React Native, Flutter, etc.
@@ -46,8 +46,8 @@ Just mention it in `PROJECT_BRIEF.md`.
 
 **1. Fork this repo**
 ```bash
-git clone https://github.com/YOUR_USERNAME/autogrow.git
-cd autogrow
+git clone https://github.com/YOUR_USERNAME/seedgpt.git
+cd seedgpt
 ```
 
 **2. Tell it what to build**
@@ -91,8 +91,8 @@ You just review and merge the PRs you like.
 
 ## Need help?
 
-- **Questions?** Open a [Discussion](https://github.com/roeiba/autoGrow/discussions)
-- **Found a bug?** Open an [Issue](https://github.com/roeiba/autoGrow/issues)
+- **Questions?** Open a [Discussion](https://github.com/roeiba/seedGPT/discussions)
+- **Found a bug?** Open an [Issue](https://github.com/roeiba/seedGPT/issues)
 - **Want to contribute?** See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
@@ -103,4 +103,4 @@ MIT - use it however you want.
 
 **Built something cool?** Star the repo and share your project!
 
-[⭐ Star](https://github.com/roeiba/autoGrow) · [Report Issue](https://github.com/roeiba/autoGrow/issues) · [Discussions](https://github.com/roeiba/autoGrow/discussions)
+[⭐ Star](https://github.com/roeiba/seedGPT) · [Report Issue](https://github.com/roeiba/seedGPT/issues) · [Discussions](https://github.com/roeiba/seedGPT/discussions)

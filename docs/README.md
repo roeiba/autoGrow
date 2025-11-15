@@ -1,14 +1,14 @@
-# AutoGrow Documentation
+# SeedGPT Documentation
 
-> **📚 Complete documentation for AutoGrow users**
+> **📚 Complete documentation for SeedGPT users**
 
-Welcome to AutoGrow - the world's first fully autonomous, self-growing software project!
+Welcome to SeedGPT - the world's first fully autonomous, self-growing software project!
 
-**[🌟 View Live Showcase](https://roeiba.github.io/AutoGrow/)** - See real projects built with AutoGrow
+**[🌟 View Live Showcase](https://roeiba.github.io/SeedGPT/)** - See real projects built with SeedGPT
 
 ## 🚀 Quick Start
 
-**New to AutoGrow?** Start here:
+**New to SeedGPT?** Start here:
 
 1. **[SETUP_GUIDE.md](SETUP_GUIDE.md)** - Get up and running in 4 steps
 2. **[../README.md](../README.md)** - Project overview
@@ -21,7 +21,7 @@ Welcome to AutoGrow - the world's first fully autonomous, self-growing software 
 - **[GITHUB_SECRETS.md](GITHUB_SECRETS.md)** - Configure GitHub secrets
 - **[launch-checklist.md](launch-checklist.md)** - Pre-launch checklist
 
-### Using AutoGrow
+### Using SeedGPT
 - **[QA_AGENT.md](QA_AGENT.md)** - QA Agent documentation
 - **[github-optimization.md](github-optimization.md)** - Optimize your setup
 
@@ -29,9 +29,9 @@ Welcome to AutoGrow - the world's first fully autonomous, self-growing software 
 - **[CONTRIBUTING_GUIDE.md](CONTRIBUTING_GUIDE.md)** - How to contribute
 - **[SECURITY_AUDIT.md](SECURITY_AUDIT.md)** - Security best practices
 
-## 🤖 How AutoGrow Works
+## 🤖 How SeedGPT Works
 
-AutoGrow has 3 autonomous agents that work 24/7:
+SeedGPT has 3 autonomous agents that work 24/7:
 
 ### 1. Issue Generator (Every 10 min)
 - Analyzes your project
@@ -54,7 +54,7 @@ AutoGrow has 3 autonomous agents that work 24/7:
 
 | I want to... | Go to... |
 |--------------|----------|
-| **Set up AutoGrow** | [SETUP_GUIDE.md](SETUP_GUIDE.md) |
+| **Set up SeedGPT** | [SETUP_GUIDE.md](SETUP_GUIDE.md) |
 | **Configure secrets** | [GITHUB_SECRETS.md](GITHUB_SECRETS.md) |
 | **Understand QA** | [QA_AGENT.md](QA_AGENT.md) |
 | **Contribute** | [CONTRIBUTING_GUIDE.md](CONTRIBUTING_GUIDE.md) |
@@ -67,7 +67,7 @@ AutoGrow has 3 autonomous agents that work 24/7:
 Your project continuously improves itself without human intervention. AI agents generate issues, write code, and create PRs automatically.
 
 ### Autonomous
-Once set up, AutoGrow runs 24/7. You only need to review and merge PRs.
+Once set up, SeedGPT runs 24/7. You only need to review and merge PRs.
 
 ### Quality-Assured
 The QA Agent monitors everything, ensuring code quality and project health.
@@ -94,7 +94,7 @@ AI agents should read `.agents/project-rules.md` for code generation guidelines.
 ```
 docs/
 ├── README.md                    # This file
-├── index.html                   # AutoGrow Showcase (GitHub Pages)
+├── index.html                   # SeedGPT Showcase (GitHub Pages)
 ├── _config.yml                  # GitHub Pages config
 ├── SETUP_GUIDE.md              # Setup instructions
 ├── GITHUB_SECRETS.md           # Secrets configuration
@@ -107,7 +107,7 @@ docs/
 
 ## 🌱 Philosophy
 
-**AutoGrow is not a template you fill out once.**
+**SeedGPT is not a template you fill out once.**
 
 It's a living, breathing project that:
 - Generates its own roadmap
